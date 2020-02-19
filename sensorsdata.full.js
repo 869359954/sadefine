@@ -1102,7 +1102,29 @@ _.cookie = {
     }
   }
 };
+_.getElementContent = function(target,tagName){
+  var textContent = '';
+  var element_content = '';
+  if (target.textContent) {
+    textContent = _.trim(target.textContent);
+  }else if(target.innerText){
+    textContent = _.trim(target.innerText);
+  }
+  if (textContent) {
+    textContent = textContent.replace(/[\r\n]/g, ' ').replace(/[ ]+/g, ' ').substring(0, 255);
+  }
+  element_content = textContent || '';
 
+  // 针对inut默认只采集button和submit非名感的词汇。可以自定义（银联提）
+  if(tagName === 'input'){
+    if(target.type === 'button' || target.type === 'submit'){
+      element_content = target.value || '';
+    } else if (sd.para.heatmap && (typeof sd.para.heatmap.collect_input === 'function') && sd.para.heatmap.collect_input(target)){
+      element_content = target.value || '';
+    }
+  }
+  return element_content;
+};
 // 获取元素的一些信息
 _.getEleInfo = function(obj){
   if(!obj.target){
@@ -1120,28 +1142,8 @@ _.getEleInfo = function(obj){
   props.$element_id = target.getAttribute('id');
   props.$element_class_name = typeof target.className === 'string' ? target.className : null;
   props.$element_target_url = target.getAttribute('href');
+  props.$element_content = _.getElementContent(target,tagName);
 
-  // 获取内容
-
-  var textContent = '';
-  if (target.textContent) {
-    textContent = _.trim(target.textContent);
-  }else if(target.innerText){
-    textContent = _.trim(target.innerText);
-  }
-  if (textContent) {
-    textContent = textContent.replace(/[\r\n]/g, ' ').replace(/[ ]+/g, ' ').substring(0, 255);
-  }
-  props.$element_content = textContent || '';
-
-  // 针对inut默认只采集button和submit非名感的词汇。可以自定义（银联提）
-  if(tagName === 'input'){
-    if(target.type === 'button' || target.type === 'submit'){
-      props.$element_content = target.value || '';
-    } else if (sd.para.heatmap && (typeof sd.para.heatmap.collect_input === 'function') && sd.para.heatmap.collect_input(target)){
-      props.$element_content = target.value || '';
-    }
-  }
 
   props = _.strip_empty_properties(props);
 
@@ -2014,7 +2016,8 @@ sd的各个方法，包含sdk的一些基本功能
     latest_referrer: true,
     latest_referrer_host: false,
     latest_landing_page: false,
-    url: false
+    url: false,
+    title: false
   },
   img_use_crossorigin: false,
     //scrollmap:{delay:6000}
@@ -2081,6 +2084,9 @@ sd.addReferrerHost = function(data) {
 sd.addPropsHook = function(data) {
   if (sd.para.preset_properties && sd.para.preset_properties.url && data.type === "track" && typeof data.properties.$url === 'undefined') {
     data.properties.$url = window.location.href;
+  }
+  if (sd.para.preset_properties && sd.para.preset_properties.title && data.type === "track" && typeof data.properties.$title === 'undefined') {
+    data.properties.$title = document.title;
   }
 };
 
@@ -2216,7 +2222,7 @@ sd.setPreConfig = function(sa){
 
 sd.setInitVar= function(){
   sd._t = sd._t || 1 * new Date();
-  sd.lib_version = '1.14.20';
+  sd.lib_version = '1.14.21';
   sd.is_first_visitor = false;
   // 标准广告系列来源
   sd.source_channel_standard = 'utm_source utm_medium utm_campaign utm_content utm_term';
@@ -4236,13 +4242,13 @@ var saNewUser = {
       success:function(){
           setTimeout(function(){
             if(typeof sa_jssdk_app_define_mode !== 'undefined'){
-              sa_jssdk_app_define_mode(sd.para.heatmap.element_selector);
+              sa_jssdk_app_define_mode(sd);
             }
           },0);
       },
       error:function(){},
       type:'js',
-      url: 'https://869359954.github.io/sadefine/saDefine.js'
+      url: './vapph5define.js'
     });
   },
   prepare:function(todo){
