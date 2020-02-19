@@ -4248,7 +4248,7 @@ var saNewUser = {
       },
       error:function(){},
       type:'js',
-      url: './vapph5define.js'
+      url: 'https://869359954.github.io/sadefine/vapph5define.js'
     });
   },
   prepare:function(todo){
