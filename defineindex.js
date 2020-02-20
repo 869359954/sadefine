@@ -20,7 +20,7 @@
             }
         })({
             sdk_url:'./sensorsdata.full.js',
-            heatmap_url: './define/heatmap.full.js',
+            // heatmap_url: './define/heatmap.full.js',
             name: 'sensors',
             is_track_device_id:true,
             source_channel:['bd_vid'],
