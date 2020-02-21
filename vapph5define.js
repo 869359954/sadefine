@@ -30,7 +30,7 @@
             width : po.width,
             height : po.height,
             scale : window.devicePixelRatio,
-            visibility : po.height == 0 ? 1 : 0,
+            visibility : po.height > 0,
             $url : location.href,
             $element_selector : sdStore.heatmap.getDomSelector(el)
         };
