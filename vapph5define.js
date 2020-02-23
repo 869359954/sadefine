@@ -30,7 +30,7 @@
     function getInfo(tagname,el){
         var po = el.getBoundingClientRect();
         var obj = {
-            el : el,
+            // el : el,
             $element_content : sdStore._.getElementContent(el,tagname),
             tagName : tagname,
             top : po.top,
@@ -57,8 +57,8 @@
         if(typeof SensorsData_iOS_JS_Bridge === 'object' && SensorsData_iOS_JS_Bridge.sensorsdata_define_mode && window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage){
             window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify(dataObj));
         }else if(typeof SensorsData_APP_JS_Bridge === 'object' && SensorsData_APP_JS_Bridge.sensorsdata_define_mode){
-            // SensorsData_APP_JS_Bridge.sensorsdata_define_mode(JSON.stringify(dataObj));
-            SensorsData_APP_JS_Bridge.sensorsdata_define_mode(dataObj);
+            SensorsData_APP_JS_Bridge.sensorsdata_define_mode(JSON.stringify(dataObj));
+            // SensorsData_APP_JS_Bridge.sensorsdata_define_mode(dataObj);
         }            
     }
     function addDefineListener(callback){
