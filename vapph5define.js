@@ -4,19 +4,29 @@
         var arr = [];
         function func(obj){
             for(var i=0;i<obj.length;i++){
-    　　　　　　  if(obj[i].children){
-    　　　　　　　　  func(obj[i].children);
-    　　　　　    }
                 var tagname = obj[i].tagName;
                 if(tagname === 'A' || tagname === 'BUTTON' || tagname === 'INPUT' || tagname === 'TEXTAREA'){
                     arr.push(getInfo(tagname,obj[i]));
                 }
+    　　　　　　  if(obj[i].children){
+    　　　　　　　　  func(obj[i].children);//递归遍历所有元素
+    　　　　　    }
+                
     　　　　 }    
         }    
         func(child);
         return arr;
     }
-    
+    function getVisibility(el,height){
+        var visibility = window.getComputedStyle(el,null).getPropertyValue("visibility");
+        var opacity = window.getComputedStyle(el,null).getPropertyValue("opacity");
+        if(height == 0 || visibility == "hidden" || opacity == 0){　
+            　　return false;
+            }else{
+            　　return true;
+            
+            }
+    }
     function getInfo(tagname,el){
         var po = el.getBoundingClientRect();
         var obj = {
@@ -30,7 +40,7 @@
             width : po.width,
             height : po.height,
             scale : window.devicePixelRatio,
-            visibility : po.height > 0,
+            visibility : getVisibility(el,po.height),
             $url : location.href,
             $element_selector : sdStore.heatmap.getDomSelector(el)
         };
