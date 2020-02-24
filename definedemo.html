@@ -99,9 +99,7 @@
        #default > * {
            margin: 0;
        }
-       #vi{
-           display: none;
-       }
+       
        #a1{
            display: block;
            width: 100px;
@@ -126,11 +124,40 @@
            margin-top: 10px;
            display: inline-block;
        }
+       #vi{
+           height: 100px;
+           visibility: hidden;
+       }
+       #opacity{
+           height: 100px;
+           opacity: 0;
+       }
+       #dis{
+           display: none;
+       }
     </style>
     <script src='./defineindex.js'></script>      
 </head>
 <body>
      <div>
+        <div>
+            visibility:hidden
+            <button id='vi'>
+                visibility:hidden
+             </button>
+        </div>
+        <div>
+            opacity:0
+            <button id="opacity">
+                opacity:0
+            </button>
+        </div>
+         <div>
+            display:none
+            <button id='dis'>
+                display:none
+            </button>
+         </div>
         <div>
             overflow
             <div id="over">
