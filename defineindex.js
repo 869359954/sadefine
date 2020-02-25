@@ -40,5 +40,18 @@
             sensors.quick('autoTrack');
             
 
-            
+            window.SensorsData_APP_JS_Bridge = {
+                sensorsdata_define_mode : function(data){
+                //    var data = JSON.parse(data);
+                    // console.log(data);
+                    // if(num > 0){
+                    //     console.log('开始渲染');
+                    //     setTimeout(() => {
+                    //         getEle(data.data);
+                    //         num --;
+                    //     }, 500);
+                        
+                    // }
+                }
+            };
             
