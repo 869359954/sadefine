@@ -27,7 +27,7 @@
             source_type:{
                 utm:['ls']
             },
-            server_url: 'https://test-syg.datasink.sensorsdata.cn/sa?project=liangshuang&token=27f1e21b78daf376',
+            server_url: 'http://liuxing.debugbox.sensorsdata.cn/sa?project=default',
             heatmap:{
                 scroll_notice_map:'not_collect',
                 // element_selector:'not_use_id',
@@ -40,18 +40,18 @@
             sensors.quick('autoTrack');
             
 
-            window.SensorsData_APP_JS_Bridge = {
-                sensorsdata_define_mode : function(data){
-                //    var data = JSON.parse(data);
-                    // console.log(data);
-                    // if(num > 0){
-                    //     console.log('开始渲染');
-                    //     setTimeout(() => {
-                    //         getEle(data.data);
-                    //         num --;
-                    //     }, 500);
+            // window.SensorsData_APP_JS_Bridge = {
+            //     sensorsdata_define_mode : function(data){
+            //     //    var data = JSON.parse(data);
+            //         // console.log(data);
+            //         // if(num > 0){
+            //         //     console.log('开始渲染');
+            //         //     setTimeout(() => {
+            //         //         getEle(data.data);
+            //         //         num --;
+            //         //     }, 500);
                         
-                    // }
-                }
-            };
+            //         // }
+            //     }
+            // };
             
