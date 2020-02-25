@@ -30,7 +30,7 @@
             server_url: 'https://test-syg.datasink.sensorsdata.cn/sa?project=liangshuang&token=27f1e21b78daf376',
             heatmap:{
                 scroll_notice_map:'not_collect',
-                element_selector:'not_use_id',
+                // element_selector:'not_use_id',
             },
             is_track_single_page:true,
             
