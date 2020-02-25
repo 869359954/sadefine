@@ -2,20 +2,22 @@
 ;(function(){
     function getDefineTagsAndInfo(child){
         var arr = [];
+        //递归便利获取所有可圈选元素的信息 obj
         function func(obj){
             for(var i=0;i<obj.length;i++){
                 var tagname = obj[i].tagName;
-                if(tagname === 'A' || tagname === 'BUTTON' || tagname === 'INPUT' || tagname === 'TEXTAREA'){
+                if(tagname === 'A' || tagname === 'a' || tagname === 'BUTTON' ||tagname === 'button'|| tagname === 'INPUT' ||tagname === 'input'|| tagname === 'TEXTAREA'||tagname === 'textarea'){
                     arr.push(getInfo(tagname,obj[i]));
                 }
     　　　　　　  if(obj[i].children){
-    　　　　　　　　  func(obj[i].children);//递归遍历所有元素
+    　　　　　　　　  func(obj[i].children);
     　　　　　    }
                 
     　　　　 }    
         }    
         func(child);
         return arr;
+
     }
     function getVisibility(el,height){
         var visibility = window.getComputedStyle(el,null).getPropertyValue("visibility");
@@ -27,11 +29,13 @@
             
             }
     }
+    //获取元素信息
     function getInfo(tagname,el){
         var po = el.getBoundingClientRect();
         var obj = {
             // el : el,
             $element_content : sdStore._.getElementContent(el,tagname),
+            $element_selector : sdStore.heatmap.getDomSelector(el),
             tagName : tagname,
             top : po.top,
             left : po.left,
@@ -42,11 +46,10 @@
             scale : window.devicePixelRatio,
             visibility : getVisibility(el,po.height),
             $url : location.href,
-            $element_selector : sdStore.heatmap.getDomSelector(el)
         };
         return obj;
     }
-    
+    //获取元素信息并发送给 app
     function getDefineInfo(){
         var tagDataArr = getDefineTagsAndInfo(document.children);
         var dataObj = {
@@ -95,8 +98,8 @@
         var flag = false;
         window.addEventListener('load',function(){
             flag = true;
-            getDefineInfo();
-            addDefineListener(getDefineInfo);
+            getDefineInfo();//获取元素信息
+            addDefineListener(getDefineInfo);//添加监控器
         });
         setTimeout(function(){
             if(!flag){
