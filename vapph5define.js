@@ -3,19 +3,19 @@
     function getDefineTagsAndInfo(child){
         var arr = [];
         //递归便利获取所有可圈选元素的信息 obj
-        function func(obj){
+        function func(obj,index){
             for(var i=0;i<obj.length;i++){
+                obj[i].sensorsIndex = index;
                 var tagname = obj[i].tagName;
                 if(tagname === 'A' || tagname === 'a' || tagname === 'BUTTON' ||tagname === 'button'|| tagname === 'INPUT' ||tagname === 'input'|| tagname === 'TEXTAREA'||tagname === 'textarea'){
                     arr.push(getInfo(tagname,obj[i]));
                 }
     　　　　　　  if(obj[i].children){
-    　　　　　　　　  func(obj[i].children);
-    　　　　　    }
-                
-    　　　　 }    
+    　　　　　　　　  func(obj[i].children,index+1);
+    　　　　　    }               
+    　　　　 } 
         }    
-        func(child);
+        func(child,1);
         return arr;
 
     }
@@ -29,8 +29,22 @@
             
             }
     }
+    function getZIndex(el){
+        var zIndex = window.getComputedStyle(el,null).getPropertyValue("z-index");
+        var indexNum = 0;
+        if(zIndex == 'auto' || !zIndex){
+            indexNum = 0;
+        }else{
+            indexNum = +zIndex;
+        }
+        if(typeof(el.sensorsIndex !== 'undefined')){
+            indexNum = indexNum + el.sensorsIndex;
+        }
+        return indexNum;
+    }
     //获取元素信息
     function getInfo(tagname,el){
+        // console.log(el);
         var po = el.getBoundingClientRect();
         var obj = {
             // el : el,
@@ -46,17 +60,29 @@
             scale : window.devicePixelRatio,
             visibility : getVisibility(el,po.height),
             $url : location.href,
+            zIndex : getZIndex(el)
         };
         return obj;
+    }
+    //根据元素层级排序，前端要求 zIndex 为不重复的值
+    function sortIndex(arr){
+        arr.sort(function(a,b){
+            return a.zIndex - b.zIndex;
+        });
+        for(var i=0;i<arr.length;i++){
+           arr[i].zIndex = i;
+        }
+        return arr;
     }
     //获取元素信息并发送给 app
     function getDefineInfo(){
         var tagDataArr = getDefineTagsAndInfo(document.children);
+        var arr = sortIndex(tagDataArr);
         var dataObj = {
             callType : 'visualized_track',
-            data : tagDataArr
+            data : arr
         };
-        console.log(dataObj);
+        console.log(arr);
         if(typeof SensorsData_iOS_JS_Bridge === 'object' && SensorsData_iOS_JS_Bridge.sensorsdata_define_mode && window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage){
             window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify(dataObj));
         }else if(typeof SensorsData_APP_JS_Bridge === 'object' && SensorsData_APP_JS_Bridge.sensorsdata_define_mode){
@@ -86,7 +112,6 @@
                 },300);
             }
         };
-        
         observe(document.body, options, function(){
             console.log('监听到变化');
             obj.func();
