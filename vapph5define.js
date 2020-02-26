@@ -69,8 +69,9 @@
         arr.sort(function(a,b){
             return a.zIndex - b.zIndex;
         });
+        //app 拿到排好序的数组进行依次 +1，不需要 zindex 字段
         for(var i=0;i<arr.length;i++){
-           arr[i].zIndex = i;
+            delete arr[i].zIndex;
         }
         return arr;
     }
