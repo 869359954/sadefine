@@ -245,10 +245,41 @@ li.quiet{
        #img_ul a{
            display: block;
        }
+       .fcd{
+           height: 100px;
+           width: 100px;
+           border: 1px solid black;
+       }
+       .fcdiv{
+           height: 100px;
+           width: 100px;
+           position: absolute;
+           left: 0;
+           display: none;
+           background: yellowgreen;
+           opacity: 0.5;
+           
+       }
     </style>
     <script src='./defineindex.js'></script>      
 </head>
 <body>
+        <div>
+            <button id="fcbtn">点击显示浮层</button>
+            <div>
+                <div id='fc' class="fcdiv">
+                    <button>我是浮层 button</button>
+                </div>
+            </div>
+            <div>
+                <button class="fcd">我是底部 button</button>
+            </div>
+        </div>
+        <script>
+            fcbtn.onclick = function(){
+                fc.style.display = 'block';
+            }
+        </script>
         <div class="wrapper">
           <div class="wrapper_1"></div>
     
