@@ -61,6 +61,7 @@
             scale : window.devicePixelRatio,
             visibility : getVisibility(el,po.height),
             $url : location.href,
+            $title : document.title,
             zIndex : getZIndex(el)
         };
         return obj;
