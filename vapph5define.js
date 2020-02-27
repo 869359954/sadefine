@@ -5,13 +5,14 @@
         //递归便利获取所有可圈选元素的信息 obj
         function func(obj,index){
             for(var i=0;i<obj.length;i++){
-                obj[i].sensorsIndex = index;
-                var tagname = obj[i].tagName;
-                if(tagname === 'A' || tagname === 'a' || tagname === 'BUTTON' ||tagname === 'button'|| tagname === 'INPUT' ||tagname === 'input'|| tagname === 'TEXTAREA'||tagname === 'textarea'){
-                    arr.push(getInfo(tagname,obj[i]));
+                var target = obj[i];
+                target.sensorsIndex = index;
+                var tagname = target.tagName;
+                if(tagname === 'A' || tagname === 'BUTTON' || tagname === 'INPUT' ||tagname === 'TEXTAREA'|| target.hasAttribute('data-sensors-click')){
+                    arr.push(getInfo(tagname,target));
                 }
-    　　　　　　  if(obj[i].children){
-    　　　　　　　　  func(obj[i].children,index+1);
+    　　　　　　  if(target.children){
+    　　　　　　　　  func(target.children,index+1);
     　　　　　    }               
     　　　　 } 
         }    
@@ -88,7 +89,6 @@
             window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify(dataObj));
         }else if(typeof SensorsData_APP_JS_Bridge === 'object' && SensorsData_APP_JS_Bridge.sensorsdata_define_mode){
             SensorsData_APP_JS_Bridge.sensorsdata_define_mode(JSON.stringify(dataObj));
-            // SensorsData_APP_JS_Bridge.sensorsdata_define_mode(dataObj);
         }            
     }
     function addDefineListener(callback){
