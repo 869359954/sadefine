@@ -258,17 +258,18 @@ li.quiet{
        }
        .fcdiv{
            height: 30px;
-           width: 200px;
+           width: 100px;
            position: absolute;
            left: 0;
            display: none;
-           background: palevioletred;
+           /* background: palevioletred; */
            /* opacity: 0.5; */
            
        }
        .fcdiv button{
            height: 30px;
-           width: 200px;
+           width: 100px;
+           background: pink;
        }
        img{
            height: 100px;
@@ -289,21 +290,14 @@ li.quiet{
     <script src='./defineindex.js'></script>      
 </head>
 <body>
-    <!-- <button id="reloadbtn">强制刷新页面</button>
-    <script>
-        reloadbtn.onclick = function(){
-            window.location.reload(true);
-
-        }
-    </script>
     <h1>其他标签 data-sensors-click 测试</h1>
     <div>
-        <div data-sensors-click>div</div>
-        <div>
-            <span data-sensors-click>span</span>
+        <div data-sensors-click style="border: 1px solid grey;">div</div>
+        <div style="margin: 10px 0;">
+            <span data-sensors-click style="border: 1px solid grey;">span</span>
         </div>
         <div>
-            <img data-sensors-click src="./images/index_carousel01.jpg" alt="">
+            <img data-sensors-click style="border: 1px solid grey;" src="./images/index_carousel01.jpg" alt="">
         </div>
     </div>
     <h1>浮层测试</h1>
@@ -315,10 +309,14 @@ li.quiet{
                 </div>
             </div>
             <div>
-                <button class="fcd">我是底部 button</button>
+                <div>
+                    <div>
+                        <button class="fcd">我是底部 button</button>
+                    </div>
+                </div>
             </div>
-        </div> -->
-        <!-- <script>
+        </div>
+        <script>
             var clickflag = false;
             fcbtn.onclick = function(){
                 console.log(clickflag);
@@ -330,7 +328,7 @@ li.quiet{
                     clickflag = false;  
                 }
             }
-        </script> -->
+        </script>
         <!-- <h1>客户页面测试</h1> -->
      <!-- <div>
         <div class="wrapper">
