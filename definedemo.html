@@ -22,40 +22,45 @@
     <script src="./js/site.securejs" type="text/javascript"></script>
     <style>
         #parent{
-    position: relative;
-    margin: 50px auto;
+            display: inline-block;
+    position: absolute;
+    right: 0;
+    /* margin: 50px auto; */
     padding: 0;
-    width: 500px;
+    width: 200px;
     height: 309px;
 }
 
+
 #uls{
-    position: relative;
+    display: inline-block;
+    position: absolute;
     margin: 0;
     padding: 0;
-    width: 500px;
+    width: 200px;
     height: 309px;
     overflow: hidden;
 }
 
 #img_ul{
+    display: inline-block;
     position: absolute;
     margin: 0;
     padding: 0;
     left: 0;
     top: 0;
-    width: 3000px;           /*多留出一张图片的宽度！*/
+    width: 1200px;           /*多留出一张图片的宽度！*/
     list-style: none;
 }
 #img_ul li{
     float: left;
     margin: 0;
     padding: 0;
-    width: 500px;
+    width: 200px;
     height: 309px;
 }
 #img_ul li a img{
-    width: 500px;
+    width: 200px;
     height: 309px;
 }
 
@@ -233,11 +238,11 @@ li.quiet{
            display: inline-block;
        }
        #vi{
-           height: 100px;
+           height: 30px;
            visibility: hidden;
        }
        #opacity{
-           height: 100px;
+           height: 30px;
            opacity: 0;
        }
        #dis{
@@ -270,6 +275,7 @@ li.quiet{
            width: 100px;
        }
        h1{
+           margin: 20px;
            font-weight: bolder;
            font-size: larger;
        }
@@ -1671,9 +1677,14 @@ li.quiet{
           </script>
      </div> -->
       <h1>轮播图测试</h1>
-    <div id= "parent">
-        <div id="uls">
-            <ul id="img_ul">
+      <div style="width: 500px;height: 309px;background: palevioletred; display:inline-block;">
+        我是 轮播图底层元素
+    </div>
+    <div id= "parent" style="display: inline-block;">
+        
+        <div id="uls" style="display: inline-block;">
+            
+            <ul id="img_ul" style="display: inline-block;">
                 <li><a id='lia1' href=""><img src="imgs/0.jpg"/></a></li>
                 <li><a id='lia2' href=""><img src="imgs/1.jpeg"/></a></li>
                 <li><a id='lia3' href=""><img src="imgs/2.jpeg"/></a></li>
