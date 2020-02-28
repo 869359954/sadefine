@@ -302,8 +302,15 @@ li.quiet{
             </div>
         </div>
         <script>
+            var clickflag = false;
             fcbtn.onclick = function(){
-                fc.style.display = 'block';
+                if(!clickflag){
+                    fc.style.display = 'block';
+                    clickflag = true;
+                }else{
+                    fc.style.display = 'block';
+                    clickflag = false;  
+                }
             }
         </script>
         <h1>客户页面测试</h1>
