@@ -6,9 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge" >
     <title>sdk demo ls </title>
-    <script>
-        window.location.reload(true);
-    </script>
+    
     <link href="./css/reset.css" rel="stylesheet" type="text/css">
     <link href="./css/jquery-ui.css" rel="stylesheet" type="text/css">
     <link href="./css/site.css" rel="stylesheet" type="text/css">
@@ -282,6 +280,13 @@ li.quiet{
     <script src='./defineindex.js'></script>      
 </head>
 <body>
+    <button id="reloadbtn">强制刷新页面</button>
+    <script>
+        reloadbtn.onclick = function(){
+            window.location.reload(true);
+
+        }
+    </script>
     <h1>其他标签 data-sensors-click 测试</h1>
     <div>
         <div data-sensors-click>div</div>
