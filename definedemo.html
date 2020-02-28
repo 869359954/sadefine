@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge" >
     <title>sdk demo ls </title>
+    <script>
+        window.location.reload(true);
+    </script>
     <link href="./css/reset.css" rel="stylesheet" type="text/css">
     <link href="./css/jquery-ui.css" rel="stylesheet" type="text/css">
     <link href="./css/site.css" rel="stylesheet" type="text/css">
@@ -304,11 +307,12 @@ li.quiet{
         <script>
             var clickflag = false;
             fcbtn.onclick = function(){
+                console.log(clickflag);
                 if(!clickflag){
                     fc.style.display = 'block';
                     clickflag = true;
                 }else{
-                    fc.style.display = 'block';
+                    fc.style.display = 'none';
                     clickflag = false;  
                 }
             }
