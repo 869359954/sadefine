@@ -18,50 +18,102 @@
     <link href="./叮咚课堂_files/common.42b427d8.css" rel="stylesheet">
     <link href="./叮咚课堂_files/app.752def2f.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="./叮咚课堂_files/change9yuan95lessonIndex.112030a2.css">
+    
     <script charset="utf-8" src="./叮咚课堂_files/change9yuan95lessonIndex.112030a2.js"></script>
+    <style>
+         #parent{
+
+/* margin: 50px auto; */
+padding: 0;
+width: 300px;
+height: 309px;
+}
+
+
+#uls{
+display: inline-block;
+position: absolute;
+margin: 0;
+padding: 0;
+width: 300px;
+height: 309px;
+overflow: hidden;
+}
+
+#img_ul{
+display: inline-block;
+position: absolute;
+margin: 0;
+padding: 0;
+left: 0;
+top: 0;
+width: 1800px;           /*多留出一张图片的宽度！*/
+list-style: none;
+}
+#img_ul li{
+float: left;
+margin: 0;
+padding: 0;
+width: 300px;
+height: 309px;
+}
+#img_ul li a img{
+width: 300px;
+height: 309px;
+}
+
+#litCir_ul{
+position: absolute;
+margin: 0;
+padding: 0;
+right: 10px;
+bottom: 10px;
+list-style: none;
+}
+#litCir_ul li{
+margin: 0;
+padding: 0;
+float: left;
+width: 20px;
+height: 20px;
+text-align: center;
+line-height: 20px;
+border-radius: 50%; 
+margin-left:10px ;
+cursor: pointer;
+}
+
+li.active{
+background-color: white;
+}
+li.quiet{
+background-color: #1e90ff;
+}
+    </style>
 </head>
 
 <body>
     <div data-v-6408efb7="" class="viewport-wrap-box">
         <div data-v-71055817="" data-v-6408efb7="" class="five-lesson">
             <div data-v-71055817="" class="header">
-                <div data-v-71055817=""
-                    class="swiper-container swiper-container-initialized swiper-container-horizontal">
-                    <div class="swiper-wrapper"
-                        style="transition-duration: 0ms; transform: translate3d(-3657px, 0px, 0px);">
-                        <div data-v-71055817="" class="swiper-slide swiper-slide-duplicate swiper-slide-duplicate-prev"
-                            data-swiper-slide-index="0"><img data-v-71055817="" src="./叮咚课堂_files/head-bg-1.png" alt=""
-                                class="head-bg"></div>
-                        <div data-v-71055817=""
-                            class="swiper-slide swiper-slide-duplicate swiper-slide-duplicate-active"
-                            data-swiper-slide-index="1"><img data-v-71055817="" src="./叮咚课堂_files/head-bg-2.png" alt=""
-                                class="head-bg"></div>
-                        <div data-v-71055817="" class="swiper-slide swiper-slide-prev swiper-slide-duplicate-next"
-                            data-swiper-slide-index="0"><img data-v-71055817="" src="./叮咚课堂_files/head-bg-1.png" alt=""
-                                class="head-bg"></div>
-                        <div data-v-71055817="" class="swiper-slide swiper-slide-active" data-swiper-slide-index="1">
-                            <img data-v-71055817="" src="./叮咚课堂_files/head-bg-2.png" alt="" class="head-bg"></div>
-                        <div data-v-71055817=""
-                            class="swiper-slide swiper-slide-duplicate swiper-slide-next swiper-slide-duplicate-prev"
-                            data-swiper-slide-index="0"><img data-v-71055817="" src="./叮咚课堂_files/head-bg-1.png" alt=""
-                                class="head-bg"></div>
-                        <div data-v-71055817=""
-                            class="swiper-slide swiper-slide-duplicate swiper-slide-duplicate-active"
-                            data-swiper-slide-index="1"><img data-v-71055817="" src="./叮咚课堂_files/head-bg-2.png" alt=""
-                                class="head-bg"></div>
-                    </div> <span class="swiper-notification" aria-live="assertive" aria-atomic="true"></span>
-                </div>
-                <div data-v-71055817="" class="swiper-index">2/2</div>
-                <div data-v-71055817="" class="price-time">
-                    <div data-v-71055817="" class="left">
-                        <div data-v-71055817="" class="price"><span data-v-71055817="" class="symbol">￥</span>9.9</div>
-                        <div data-v-71055817="" class="average">
-                            <div data-v-71055817="" class="per">1.98元/节</div>
-                            <div data-v-71055817="" class="experience">(体验)</div>
+                <div>
+                    <div id= "parent" >
+        
+                        <div id="uls" >
+                            
+                            <ul id="img_ul" style="display: inline-block;">
+                                <li><a id='lia1' href=""><img src="叮咚课堂_files/head-bg-1.png"/></a></li>
+                                <li><a id='lia2' href=""><img src="叮咚课堂_files/head-bg-2.png"/></a></li>
+                                <li><a id='lia3' href=""><img src="叮咚课堂_files/head-bg-1.png"/></a></li>
+                                <li><a id='lia4' href=""><img src="叮咚课堂_files/head-bg-2.png"/></a></li>
+                                <li><a id='lia5' href=""><img src="叮咚课堂_files/brand-2.png"/></a></li>
+                            </ul>
+                            <ul id='litCir_ul'></ul>
                         </div>
-                    </div>
-                    <div data-v-71055817="" class="right">
-                        <div data-v-71055817="" class="limited-text2">仅限3月</div>
+                        <div id="buttons">
+                            <span id="left">&lt;</span>
+                            <span id="right">&gt;</span>
+                        </div>
                     </div>
                 </div>
                 <div data-v-71055817="" class="title-wrapper">
@@ -75,16 +127,17 @@
                     <div data-v-71055817="" class="item">
                         <div data-v-71055817="" class="label">赠品</div>
                         <div data-v-71055817="" class="content">配套教材礼包*1（全国包邮）</div>
-                        <div data-v-71055817="" class="check">查看</div>
+                        <div data-v-71055817="" class="check" data-sensors-click>查看</div>
                     </div>
                     <div data-v-71055817="" class="item">
                         <div data-v-71055817="" class="label">促销</div>
                         <div data-v-71055817="" class="content">
                             <div data-v-71055817="" class="line">
-                                <div data-v-71055817="" class="limited">限时特惠</div>9.9元5节外教课
+                                <div data-v-71055817="" class="limited" data-sensors-click>限时特惠</div>
+                                <a href="">9.9元5节外教课</a>
                             </div>
                             <div data-v-71055817="" class="line">
-                                <div data-v-71055817="" class="limited">限购</div>每人限购一次
+                                <div data-v-71055817="" class="limited" data-sensors-click>限购</div>每人限购一次
                             </div>
                         </div>
                     </div>
@@ -93,33 +146,33 @@
             <div data-v-71055817="" class="section">
                 <div data-v-71055817="" class="questions">
                     <div data-v-71055817="" class="bar">
-                        <div data-v-71055817="" class="left">问大家</div>
-                        <div data-v-71055817="" class="right">查看全部</div>
+                        <div data-v-71055817="" class="left" data-sensors-click>问大家</div>
+                        <div data-v-71055817="" class="right" data-sensors-click>查看全部</div>
                     </div>
                     <div data-v-71055817="" class="content-wrapper">
                         <ul data-v-71055817="" class="content" style="top: -2.14rem;">
                             <li data-v-71055817="" class="item"><span data-v-71055817="" class="label"></span> <span
-                                    data-v-71055817="" class="text">孩子喜欢学吗？课程效果好不好？</span>
+                                    data-v-71055817="" class="text" data-sensors-click>孩子喜欢学吗？课程效果好不好？</span>
                                 <div data-v-71055817="" class="number">3个回答</div>
                             </li>
                             <li data-v-71055817="" class="item"><span data-v-71055817="" class="label"></span> <span
-                                    data-v-71055817="" class="text">一节课多长时间啊？孩子坐得住吗？</span>
+                                    data-v-71055817="" class="text" data-sensors-click>一节课多长时间啊？孩子坐得住吗？</span>
                                 <div data-v-71055817="" class="number">1个回答</div>
                             </li>
                             <li data-v-71055817="" class="item"><span data-v-71055817="" class="label"></span> <span
-                                    data-v-71055817="" class="text">包邮赠送教材礼盒是真的吗？多久可以收到？</span>
+                                    data-v-71055817="" class="text" data-sensors-click>包邮赠送教材礼盒是真的吗？多久可以收到？</span>
                                 <div data-v-71055817="" class="number">2个回答</div>
                             </li>
                             <li data-v-71055817="" class="item"><span data-v-71055817="" class="label"></span> <span
-                                    data-v-71055817="" class="text">上课形式是怎样的？购买后如何上课？</span>
+                                    data-v-71055817="" class="text" data-sensors-click>上课形式是怎样的？购买后如何上课？</span>
                                 <div data-v-71055817="" class="number">1个回答</div>
                             </li>
                             <li data-v-71055817="" class="item"><span data-v-71055817="" class="label"></span> <span
-                                    data-v-71055817="" class="text">如何添加老师？一般多久通过好友申请？</span>
+                                    data-v-71055817="" class="text" data-sensors-click>如何添加老师？一般多久通过好友申请？</span>
                                 <div data-v-71055817="" class="number">1个回答</div>
                             </li>
                             <li data-v-71055817="" class="item"><span data-v-71055817="" class="label"></span> <span
-                                    data-v-71055817="" class="text">孩子喜欢学吗？课程效果好不好？</span>
+                                    data-v-71055817="" class="text" data-sensors-click>孩子喜欢学吗？课程效果好不好？</span>
                                 <div data-v-71055817="" class="number">3个回答</div>
                             </li>
                         </ul>
@@ -127,18 +180,18 @@
                 </div>
             </div>
             <div data-v-71055817="" class="section brand-section">
-                <div data-v-71055817="" class="brands-wrapper"><img data-v-71055817="" src="./叮咚课堂_files/brand-1.png"
-                        alt="" class="brand-img"> <img data-v-71055817="" src="./叮咚课堂_files/brand-2.png" alt=""
-                        class="brand-img"> <img data-v-71055817="" src="./叮咚课堂_files/brand-3.png" alt=""
-                        class="brand-img"> <img data-v-71055817="" src="./叮咚课堂_files/brand-4.png" alt=""
-                        class="brand-img"> <img data-v-71055817="" src="./叮咚课堂_files/brand-5.png" alt=""
+                <div data-v-71055817="" class="brands-wrapper"><img data-v-71055817="" data-sensors-click src="./叮咚课堂_files/brand-1.png"
+                        alt="" class="brand-img"> <img data-v-71055817="" data-sensors-click src="./叮咚课堂_files/brand-2.png" alt=""
+                        class="brand-img"> <img data-v-71055817="" data-sensors-click src="./叮咚课堂_files/brand-3.png" alt=""
+                        class="brand-img"> <img data-v-71055817="" data-sensors-click src="./叮咚课堂_files/brand-4.png" alt=""
+                        class="brand-img"> <img data-v-71055817="" data-sensors-click src="./叮咚课堂_files/brand-5.png" alt=""
                         class="brand-img"></div>
             </div>
             <div data-v-71055817="" class="fixed-bot">
                 <div data-v-71055817="" class="inner">
                     <div data-v-71055817="" class="price"><span data-v-71055817="" class="symbol">￥</span>9.9<span
                             data-v-71055817="" class="text">元/5节北美外教AI课</span></div> <button data-v-71055817=""
-                        class="btn">立即购买</button>
+                        class="btn" data-sensors-click>立即购买</button>
                 </div>
             </div>
             <div data-v-71055817="" class="gift" style="display: none;">
@@ -270,6 +323,110 @@
             </div>
         </div>
     </div>
+    <script>
+             /*获取HTML中的对象*/
+    var parent = document.getElementById("parent");
+    var img_ul = document.getElementById("img_ul");
+    var litCir_ul = document.getElementById("litCir_ul");
+    var buttons = document.getElementById("buttons");
+    var cLis =litCir_ul.children;
+
+    var len = img_ul.children.length;     //图片张数
+    var width = parent.offsetWidth;       //每张图片的宽度
+    var rate = 15;                        //一张图片的切换速度， 单位为px
+    var times = 1;                        //切换速度的倍率
+    var gap = 2000;                       //自动切换间隙， 单位为毫秒
+    var timer = null;                     //初始化一个定时器
+    var picN = 0;                         //当前显示的图片下标
+    var cirN = 0;                         //当前显示图片的小圆点下标
+    var temp;
+    for (var i=0; i<len; i++){
+        var a_li = document.createElement("li");
+        a_li.className = 'quiet';
+        litCir_ul.appendChild(a_li);
+    }
+    litCir_ul.children[0].className = "active";
+    function Roll(distance){                                         //参数distance：滚动的目标点（必为图片宽度的倍数）
+clearInterval(img_ul.timer);                                     //每次运行该函数必须清除之前的定时器！
+var speed = img_ul.offsetLeft < distance ?  rate : (0-rate);     //判断图片移动的方向
+
+img_ul.timer = setInterval(function(){                           //设置定时器，每隔10毫秒，调用一次该匿名函数
+    img_ul.style.left = img_ul.offsetLeft + speed + "px";        //每一次调用滚动到的地方 (速度为 speed px/10 ms)         
+    var leave = distance - img_ul.offsetLeft;                    //距目标点剩余的px值      
+    /*接近目标点时的处理，滚动接近目标时直接到达， 避免rate值设置不当时不能完整显示图片*/
+    if (Math.abs(leave) <= Math.abs(speed)) {                    
+        clearInterval(img_ul.timer);
+        img_ul.style.left = distance + "px";
+    }
+},10);
+}
+img_ul.appendChild(img_ul.children[0].cloneNode(true));
+
+function autoRun(){
+    picN++;
+    cirN++;
+    if(picN > len){                  //滚动完克隆项后
+        img_ul.style.left = 0;       //改变left至真正的第一项处
+        picN = 1;                    //从第二张开始显示
+    }
+    Roll(-picN*width);
+    
+    if(cirN > len-1){                //判断是否到了最后一个圆点
+        cirN = 0;                 
+    }
+    for(var i=0; i<len; i++){
+        cLis[i].className = "quiet";
+    }
+    cLis[cirN].className = "active";
+}
+for(var i=0; i<len; i++){
+        cLis[i].index = i;
+        cLis[i].onmouseover = function(){
+            for(var j=0; j<len; j++){
+                cLis[j].className = "quiet";
+            }
+            this.className = "active";
+            temp = cirN;
+            picN = cirN = this.index;
+            times = Math.abs(this.index - temp);  //距离上个小圆点的距离
+            rate = rate*times;                    //根据距离改变切换速率
+            Roll(-this.index * width);
+            rate = 15;
+        }
+    }
+    parent.onmouseover = function(){
+        clearInterval(timer);
+        buttons.style.display = 'block';
+    }
+    parent.onmouseout = function(){
+        timer = setInterval(autoRun, gap);
+        buttons.style.display = 'none';
+    }
+        /*上一张*/
+        buttons.children[0].onclick = function(){ 
+        picN--;
+        cirN--;
+        if(picN < 0){                               //滚动完第一项后
+            img_ul.style.left = -len*width + "px";  //改变left至克隆的第一项处
+            picN = cirN = len-1;
+        }
+        Roll(-picN*width);
+        //bug处理
+        if(cirN < 0){
+            cirN = len-1;
+        }
+        for(var i=0; i<len; i++){
+            cLis[i].className = "quiet";
+        }
+        cLis[cirN].className = "active";
+    }
+    /*下一张*/
+    buttons.children[1].onclick = autoRun;
+    setInterval(() => {
+        autoRun();
+    }, 1000);
+    /*克隆第一个li到列表末*/
+     </script> 
     <script type="text/javascript" src="./叮咚课堂_files/manifest.e3a55c84.js"></script>
     <script type="text/javascript" src="./叮咚课堂_files/common.42b427d8.js"></script>
     <script type="text/javascript" src="./叮咚课堂_files/app.752def2f.js"></script>
