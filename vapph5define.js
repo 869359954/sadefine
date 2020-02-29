@@ -92,7 +92,8 @@
             SensorsData_APP_JS_Bridge.sensorsdata_define_mode(JSON.stringify(dataObj));
         }            
     }
-    function addDefineListener(callback){
+    //监听 dom 变化
+    function domListener(callback){
         function observe (el, options, callback) {
             var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
             var observer = new MutationObserver(callback);
@@ -118,6 +119,27 @@
             console.log('监听到变化');
             obj.func();
         });
+    }
+    //监听 scroll 事件
+    function scrollListener(callback){
+        var obj = {
+            temp: null,
+            callback: callback,
+            func: function(){
+                clearTimeout(this.temp);
+                var that = this;
+                this.temp = setTimeout(function(){
+                    that.callback();
+                },300);
+            }
+        };
+        window.onscroll = function(){
+            obj.func();
+        };
+    }
+    function addDefineListener(callback){
+        domListener(callback);
+        scrollListener(callback);
     }
     var sdStore = null;
     window.sa_jssdk_app_define_mode = function(sd){
