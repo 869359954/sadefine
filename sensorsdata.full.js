@@ -4310,7 +4310,11 @@ var saNewUser = {
       heatmap.setNotice();
       isReady(sessionStorage.getItem('sensors_heatmap_id'),sessionStorage.getItem('sensors_heatmap_type'),location.href);
     }else if(sd.para.use_app_track === true && ((typeof SensorsData_iOS_JS_Bridge === 'object' && SensorsData_iOS_JS_Bridge.sensorsdata_define_mode) || (typeof SensorsData_APP_JS_Bridge === 'object' && SensorsData_APP_JS_Bridge.sensorsdata_define_mode))){
-      this.initDefineMode();
+      if (!_.isObject(sd.para.heatmap) || sd.para.heatmap.clickmap !== 'default') {
+        alert('H5 未开启全埋点！');
+      }else{
+        this.initDefineMode();
+      }
     }else{
       todo();
       //进入热力图采集模式
