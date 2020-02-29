@@ -28,10 +28,10 @@
                 utm:['ls']
             },
             server_url: 'http://liuxing2.debugbox.sensorsdata.cn/sa?project=chuqiangsheng',
-            // heatmap:{
-            //     scroll_notice_map:'not_collect',
-            //     // element_selector:'not_use_id',
-            // },
+            heatmap:{
+                scroll_notice_map:'not_collect',
+                // element_selector:'not_use_id',
+            },
             is_track_single_page:true,
             
             use_app_track:true
