@@ -4309,13 +4309,15 @@ var saNewUser = {
     } else if(_.sessionStorage.isSupport() && typeof sessionStorage.getItem('sensors_heatmap_id') === 'string'){
       heatmap.setNotice();
       isReady(sessionStorage.getItem('sensors_heatmap_id'),sessionStorage.getItem('sensors_heatmap_type'),location.href);
-    }else if(sd.para.use_app_track === true && ((typeof SensorsData_iOS_JS_Bridge === 'object' && SensorsData_iOS_JS_Bridge.sensorsdata_define_mode) || (typeof SensorsData_APP_JS_Bridge === 'object' && SensorsData_APP_JS_Bridge.sensorsdata_define_mode))){
-      if (!_.isObject(sd.para.heatmap) || sd.para.heatmap.clickmap !== 'default') {
-        alert('H5 未开启全埋点！');
-      }else{
-        this.initDefineMode();
-      }
     }else{
+      //圈选模式加载 define.js 但是不影响正常数据采集流程
+      if(sd.para.use_app_track === true && ((typeof SensorsData_iOS_JS_Bridge === 'object' && SensorsData_iOS_JS_Bridge.sensorsdata_define_mode) || (typeof SensorsData_APP_JS_Bridge === 'object' && SensorsData_APP_JS_Bridge.sensorsdata_define_mode))){
+        if (!_.isObject(sd.para.heatmap) || sd.para.heatmap.clickmap !== 'default') {
+          alert('H5 未开启全埋点！');
+        }else{
+          this.initDefineMode();
+        }
+      }
       todo();
       //进入热力图采集模式
       if (_.isObject(sd.para.heatmap)) {
