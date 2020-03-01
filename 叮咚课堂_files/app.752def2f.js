@@ -7033,7 +7033,7 @@
 				};
 				location.origin
 			} catch (t) {}
-			n("tRlc").a.sensorsInit(), i.a.config.devtools = !0, i.a.config.debug = !0, i.a.use(et, {
+			i.a.config.devtools = !0, i.a.config.debug = !0, i.a.use(et, {
 				loading: rt.a,
 				error: rt.a
 			}), i.a.prototype.$Toast = ye.a, i.a.prototype.$MessageBox = Ae, i.a.prototype.$Dialog = Ce.a, i.a.prototype.$Loading = ge.a, i.a.prototype.$Native = _.a, i.a.prototype.$PostNativeSensor = _.d, i.a.mixin(Ee.a), y.a.attach(document.body), y.a.prototype.focus = function (t) {
