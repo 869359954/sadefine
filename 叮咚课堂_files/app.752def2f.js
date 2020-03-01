@@ -19084,24 +19084,7 @@
 			});
 			n("6+yp");
 			var r = {
-				sensorsInit: function () {
-					var t = !(arguments.length > 0 && void 0 !== arguments[0]) || arguments[0],
-						e = n("i9i0"),
-						r = "https://sc.ddkt365.com/sa?project=default";
-					location.origin.indexOf("h5.ddkt365.com") > -1 && (r = "https://sc.ddkt365.com/sa?project=production"), e.init({
-						server_url: r,
-						heatmap_url: "//res.ddkt365.com/activity/common/js/sensors/heatmap.min.js",
-						is_track_single_page: !0,
-						heatmap: {
-							clickmap: "default",
-							scroll_notice_map: "default"
-						}
-					}), e.registerPage({
-						current_url: location.href,
-						referrer: document.referrer,
-						is_wx_or_app: navigator.userAgent.match(/micromessenger/i) ? "wx" : "app"
-					}), t && e.quick("autoTrack"), window.sensors = e
-				}
+				
 			}
 		},
 		tlo0: function (t, e, n) {
