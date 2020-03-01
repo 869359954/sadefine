@@ -4038,7 +4038,9 @@ var saNewUser = {
         var selector = this.getDomSelector(target);
         var prop = _.getEleInfo({target:target});
 
-        prop.$element_selector = selector ? selector : '';
+        var element_selector = selector ? selector : '';
+        prop.$element_selector = element_selector;
+        prop.$element_path = element_selector;
         if(sd.para.heatmap && sd.para.heatmap.custom_property) {
           var customP = sd.para.heatmap.custom_property(target);
           if(_.isObject(customP)){
