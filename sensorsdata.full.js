@@ -2413,7 +2413,7 @@ sd.debug = {
       if((typeof target === 'object') && target.tagName){
         var tagName = target.tagName.toLowerCase();
         var parent_ele = target.parentNode.tagName.toLowerCase();
-        if (tagName !== 'button' && tagName !== 'a' && parent_ele !== 'a' && parent_ele !== 'button' && tagName !== 'input' && tagName !== 'textarea') {
+        if (tagName !== 'button' && tagName !== 'a' && parent_ele !== 'a' && parent_ele !== 'button' && tagName !== 'input' && tagName !== 'textarea' && !target.hasAttribute('data-sensors-click')) {
           heatmap.start(null,target,tagName, props, callback);
         }
       }
@@ -4221,7 +4221,7 @@ var saNewUser = {
 
         var parent_ele = target.parentNode;
 
-        if(tagName === 'a' || tagName === 'button' || tagName === 'input' || tagName === 'textarea'){
+        if(tagName === 'a' || tagName === 'button' || tagName === 'input' || tagName === 'textarea' || target.hasAttribute('data-sensors-click')){
           that.start(ev, target, tagName);
         }else if(parent_ele.tagName.toLowerCase() === 'button' || parent_ele.tagName.toLowerCase() === 'a'){
           that.start(ev, parent_ele, target.parentNode.tagName.toLowerCase());
