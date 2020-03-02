@@ -2313,7 +2313,10 @@ sd.debug = {
       '1': name + 'use_app_track为false',
       '2': name + 'Android或者iOS，没有暴露相应方法',
       '3.1': name + 'Android校验server_url失败',
-      '3.2': name + 'iOS校验server_url失败'
+      '3.2': name + 'iOS校验server_url失败',
+      '4.1': 'WKWebView SDK，未设置 host 和 project, 成功发往iOS SDK',
+      '4.2': 'WKWebView SDK，设置了 host 和 project但不匹配，成功发往 web server_url',
+      '4.3': 'WKWebView SDK，设置了匹配的 host 和 project，成功发往 iOS SDK'
     };
     var output = obj.output;
     var step = obj.step;
@@ -3252,8 +3255,41 @@ sendState.getSendCall = function(data, config, callback) {
 
   // 打通app传数据给app
   if(sd.para.use_app_track === true || sd.para.use_app_track === 'only'){
-    if((typeof SensorsData_APP_JS_Bridge === 'object') && (SensorsData_APP_JS_Bridge.sensorsdata_verify || SensorsData_APP_JS_Bridge.sensorsdata_track)){
-      // 如果有新版方式，优先用新版
+    // iOS WKWebView
+    if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker) {
+      if (window.sensorsdata_app_project && window.sensorsdata_app_host) {
+        var ioswkwebviewhostname = null;
+        var ioswkwebviewproject = null;
+        try{
+          ioswkwebviewhostname = _.URL(sd.para.server_url).hostname;
+          ioswkwebviewproject = _.URL(sd.para.server_url).searchParams.get('project') || 'default';
+        }catch(e){};
+        if (ioswkwebviewhostname === window.sensorsdata_app_host && ioswkwebviewproject === window.sensorsdata_app_project) {
+          sd.debug.apph5({
+            data: originData,
+            step: '4.3',
+            output:'all'
+          });
+          window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify({callType:'app_h5_track', data: _.extend({server_url:sd.para.server_url}, originData)}));
+        } else {
+          sd.debug.apph5({
+            data: originData,
+            step: '4.2',
+            output:'all'
+          });
+          this.prepareServerUrl();
+        }
+      } else {
+        // 未配置 host 和 project，依然发往 iOS SDK
+        sd.debug.apph5({
+          data: originData,
+          step: '4.1',
+          output:'all'
+        });
+        window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify({callType:'app_h5_track', data: _.extend({server_url:sd.para.server_url}, originData)}));
+      }
+    } else if((typeof SensorsData_APP_JS_Bridge === 'object') && (SensorsData_APP_JS_Bridge.sensorsdata_verify || SensorsData_APP_JS_Bridge.sensorsdata_track)){
+    // 如果有新版方式，优先用新版
       if(SensorsData_APP_JS_Bridge.sensorsdata_verify){
         // 如果校验通过则结束，不通过则降级改成h5继续发送
         if(!SensorsData_APP_JS_Bridge.sensorsdata_verify(JSON.stringify(_.extend({server_url:sd.para.server_url},originData)))){
