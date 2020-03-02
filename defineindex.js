@@ -38,7 +38,7 @@
             });
             
             sensors.quick('autoTrack');
-            
+            sensors.track('lstest',{});
 
             // window.SensorsData_APP_JS_Bridge = {
             //     sensorsdata_define_mode : function(data){
