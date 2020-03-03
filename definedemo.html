@@ -392,7 +392,7 @@ for(var i=0; i<len; i++){
             times = Math.abs(this.index - temp);  //距离上个小圆点的距离
             rate = rate*times;                    //根据距离改变切换速率
             Roll(-this.index * width);
-            rate = 15;
+            rate = 1000;
         }
     }
     parent.onmouseover = function(){
@@ -425,7 +425,7 @@ for(var i=0; i<len; i++){
     buttons.children[1].onclick = autoRun;
     setInterval(() => {
         autoRun();
-    }, 1000);
+    }, 3000);
     /*克隆第一个li到列表末*/
      </script> 
     <script type="text/javascript" src="./叮咚课堂_files/manifest.e3a55c84.js"></script>
