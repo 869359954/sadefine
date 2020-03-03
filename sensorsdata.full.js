@@ -3257,7 +3257,7 @@ sendState.getSendCall = function(data, config, callback) {
   if(sd.para.use_app_track === true || sd.para.use_app_track === 'only'){
     // iOS WKWebView
     if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker) {
-      if (window.SensorsData_iOS_JS_Bridge.sensorsdata_app_project && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_host) {
+      if (_.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_project && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_host) {
         var ioswkwebviewhostname = null;
         var ioswkwebviewproject = null;
         try{
