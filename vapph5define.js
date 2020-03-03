@@ -103,26 +103,21 @@
             subtree: true,
             attributes: true
         };
-        // var throttle = function(func, delay) {            
-        //     var timer = null;            
-        //     return function() {                
-        //         var context = this;               
-        //         var args = arguments;                
-        //         if (!timer) {                    
-        //             timer = setTimeout(function() {                        
-        //                 func.apply(context, args);                        
-        //                 timer = null;                    
-        //             }, delay);                
-        //         }            
-        //     };        
-        // };               
-        // observe(document.body, options, function(){
-        //     console.log('监听到变化');
-        //     throttle(callback,1000);
-        // });
-        // sdStore._.addEvent(window,'scroll', function () {
-        //     throttle(callback,1000);
-        // });
+        var throttle = function(func, delay) {            
+            var timer = null;            
+            return function() {                
+                var context = this;               
+                var args = arguments;                
+                if (!timer) {                    
+                    timer = setTimeout(function() {                        
+                        func.apply(context, args);                        
+                        timer = null;                    
+                    }, delay);                
+                }            
+            };        
+        };              
+        observe(document.body, options, throttle(callback, 1000));
+        sdStore._.addEvent(window,'scroll',throttle(callback, 1000));
     }
     var sdStore = null;
     window.sa_jssdk_app_define_mode = function(sd){
