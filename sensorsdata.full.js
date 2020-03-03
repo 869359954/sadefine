@@ -3257,14 +3257,14 @@ sendState.getSendCall = function(data, config, callback) {
   if(sd.para.use_app_track === true || sd.para.use_app_track === 'only'){
     // iOS WKWebView
     if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker) {
-      if (window.sensorsdata_app_project && window.sensorsdata_app_host) {
+      if (window.SensorsData_iOS_JS_Bridge.sensorsdata_app_project && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_host) {
         var ioswkwebviewhostname = null;
         var ioswkwebviewproject = null;
         try{
           ioswkwebviewhostname = _.URL(sd.para.server_url).hostname;
           ioswkwebviewproject = _.URL(sd.para.server_url).searchParams.get('project') || 'default';
         }catch(e){};
-        if (ioswkwebviewhostname === window.sensorsdata_app_host && ioswkwebviewproject === window.sensorsdata_app_project) {
+        if (ioswkwebviewhostname === window.SensorsData_iOS_JS_Bridge.sensorsdata_app_host && ioswkwebviewproject === window.SensorsData_iOS_JS_Bridge.sensorsdata_app_project) {
           sd.debug.apph5({
             data: originData,
             step: '4.3',
