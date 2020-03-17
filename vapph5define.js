@@ -1,54 +1,89 @@
 
 ;(function(){
-    function getDefineTagsAndInfo(child){
+    //获取可圈选标签
+    function getDefineTags(child){
         var arr = [];
+        var DefineTagNum = 0;
         //递归便利获取所有可圈选元素的信息 obj
-        function func(obj,index){
+        function func(obj,index,overflowElement){
             for(var i=0;i<obj.length;i++){
                 var target = obj[i];
-                target.sensorsIndex = index;
                 var tagname = target.tagName;
+                var overflow = window.getComputedStyle(target,null).getPropertyValue("overflow"); 
                 if(tagname === 'A' || tagname === 'BUTTON' || tagname === 'INPUT' ||tagname === 'TEXTAREA'|| target.hasAttribute('data-sensors-click')){
-                    arr.push(getInfo(tagname,target));
-                }
+                    var tagstore = {
+                        level : index,
+                        id : 'h' + DefineTagNum
+                    };
+                    DefineTagNum ++;
+                    if(overflowElement){
+                        tagstore.overflowElement = overflowElement;
+                    }
+                    target.sensorsDefineStore = tagstore;
+                    arr.push(target);
+                }       
     　　　　　　  if(target.children){
-    　　　　　　　　  func(target.children,index+1);
-    　　　　　    }               
+                    if(overflow == 'hidden'){
+                        func(target.children,index+1,target);
+                    }else if(overflowElement){
+                        func(target.children,index+1,overflowElement);
+                    }else{
+                        func(target.children,index+1);
+                    }
+    　　　　　    }
     　　　　 } 
         }    
         func(child,1);
         return arr;
 
     }
-    function getVisibility(el,height){
+    function getVisibility(el,po){
         var visibility = window.getComputedStyle(el,null).getPropertyValue("visibility");
         var opacity = window.getComputedStyle(el,null).getPropertyValue("opacity");
-        if(height == 0 || visibility == "hidden" || opacity == 0){　
-            　　return false;
-            }else{
-            　　return true;
-            
+        var overHide = false;
+        if(typeof(el.sensorsDefineStore) == 'object' && el.sensorsDefineStore.overflowElement){
+            var overParentPo = el.sensorsDefineStore.overflowElement.getBoundingClientRect();
+            if((po.bottom<=overParentPo.top)||(po.top>=overParentPo.bottom)||(po.right<=overParentPo.left)||(po.left>=overParentPo.right)){
+                overHide = true;
             }
+        }
+        if(po.height == 0 || visibility == "hidden" || opacity == 0 || overHide){　
+            　　return false;
+        }else{
+            　　return true;
+        }
     }
+    //zIndex 取值为 level+zIndex
     function getZIndex(el){
         var zIndex = window.getComputedStyle(el,null).getPropertyValue("z-index");
         var indexNum = 0;
-        if(zIndex == 'auto' || !zIndex){
-            indexNum = 0;
-        }else{
+        if(zIndex && !isNaN(+zIndex)){
             indexNum = +zIndex;
         }
-        if(typeof(el.sensorsIndex !== 'undefined')){
-            indexNum = indexNum + el.sensorsIndex;
+        if(typeof(el.sensorsDefineStore) !== 'undefined'){
+            indexNum += el.sensorsDefineStore.level;
         }
         return indexNum;
     }
+    //获取可圈选子元素
+    function getSubElements(el){
+        var elementsArr = [];
+        if(el.children){
+            for(var i=0;i<el.children.length;i++){
+                if(typeof(el.children[i].sensorsDefineStore) == 'object' && el.children[i].sensorsDefineStore.id){
+                     elementsArr.push(el.children[i].sensorsDefineStore.id);
+                }
+            }
+        }
+        return elementsArr;
+    }
     //获取元素信息
-    function getInfo(tagname,el){
-        // console.log(el);
+    function getInfo(el){
         var po = el.getBoundingClientRect();
+        var tagname = el.tagName;
         var obj = {
             // el : el,
+            id : el.sensorsDefineStore.id,
             $element_content : sdStore._.getElementContent(el,tagname),
             $element_selector : sdStore.heatmap.getDomSelector(el),
             tagName : tagname,
@@ -59,12 +94,22 @@
             width : po.width,
             height : po.height,
             scale : window.devicePixelRatio,
-            visibility : getVisibility(el,po.height),
+            visibility : getVisibility(el,po),
             $url : location.href,
             $title : document.title,
-            zIndex : getZIndex(el)
+            zIndex : getZIndex(el),
+            // zindex:getZIndex(el),
+            subelements : getSubElements(el)
         };
         return obj;
+    }
+    //获取圈选元素信息返回按序排列好的
+    function getTagsInfo(tags){
+        var arr = [];
+        for(var i=0;i<tags.length;i++){
+            arr.push(getInfo(tags[i]));
+        }
+        return sortIndex(arr);
     }
     //根据元素层级排序，前端要求 zIndex 为不重复的值
     function sortIndex(arr){
@@ -79,19 +124,20 @@
     }
     //获取元素信息并发送给 app
     function getDefineInfo(){
-        var tagDataArr = getDefineTagsAndInfo(document.children);
-        var arr = sortIndex(tagDataArr);
+        var tags = getDefineTags(document.children);
+        var tagDataArr = getTagsInfo(tags);
         var dataObj = {
             callType : 'visualized_track',
-            data : arr
+            data : tagDataArr
         };
-        console.log(arr);
+        console.log(tagDataArr);
         if(typeof SensorsData_iOS_JS_Bridge === 'object' && SensorsData_iOS_JS_Bridge.sensorsdata_define_mode && window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage){
             window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify(dataObj));
         }else if(typeof SensorsData_APP_JS_Bridge === 'object' && SensorsData_APP_JS_Bridge.sensorsdata_define_mode){
             SensorsData_APP_JS_Bridge.sensorsdata_define_mode(JSON.stringify(dataObj));
         }            
     }
+   
     function addDefineListener(callback){
         function observe (el, options, callback) {
             var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
@@ -102,21 +148,24 @@
             childList: true,
             subtree: true,
             attributes: true
-        };              
+        }; 
         observe(document.body, options, sdStore._.throttle(callback, 1000));
         sdStore._.addEvent(window,'scroll',sdStore._.throttle(callback, 1000));
+
     }
+   
+    
     var sdStore = null;
     window.sa_jssdk_app_define_mode = function(sd){
         sdStore = sd;
-        var flag = false;
+        var loaded = false;
         window.addEventListener('load',function(){
-            flag = true;
+            loaded = true;
             getDefineInfo();//获取元素信息
             addDefineListener(getDefineInfo);//添加监控器
         });
         setTimeout(function(){
-            if(!flag){
+            if(!loaded){
                 getDefineInfo();
                 addDefineListener(getDefineInfo);
             }
