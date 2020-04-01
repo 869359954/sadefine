@@ -4361,7 +4361,7 @@ var saNewUser = {
           },
           error:function(){},
           type:'js',
-          url: './1061new/vapph5define.js'
+          url: './vapph5define.js'
         });
       }else{
 
