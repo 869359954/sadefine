@@ -27,15 +27,18 @@
             source_type:{
                 utm:['ls']
             },
-            server_url:'https://test-syg.datasink.sensorsdata.cn/sa?project=liangshuang&token=27f1e21b78daf376',
+            server_url:'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
             // server_url: 'http://liuxing2.debugbox.sensorsdata.cn/sa?project=chuqiangsheng',
             heatmap:{
                 scroll_notice_map:'not_collect',
                 // element_selector:'not_use_id',
             },
             is_track_single_page:true,
-            
-            use_app_track:true
+            use_app_track_config:{
+                use_app_track:true,
+                white_list:[]
+             
+            }
             });
             
             sensors.quick('autoTrack');
