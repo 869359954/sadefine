@@ -19,7 +19,7 @@
                     if(overflowElement){
                         tagstore.overflowElement = overflowElement;
                     }
-                    // target.sensorsDefineStore = tagstore;
+                    target.sensorsDefineStore = tagstore;
                     arr.push(target);
                 }       
     　　　　　　  if(target.children){
@@ -83,8 +83,8 @@
         var po = el.getBoundingClientRect();
         var tagname = el.tagName;
         var obj = {
-            el : el,
-            // id : el.sensorsDefineStore.id,
+            // el : el,
+            id : el.sensorsDefineStore.id,
             $element_content : sdStore._.getElementContent(el,tagname),
             $element_selector : sdStore.heatmap.getDomSelector(el),
             tagName : tagname,
