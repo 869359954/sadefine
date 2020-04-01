@@ -169,9 +169,13 @@ if(typeof JSON!=='object'){JSON={}}(function(){'use strict';var rx_one=/^[\],:{}
     }
   };
 
-
-
-
+_.hasAttribute = function(ele, attr) {
+  if (ele.hasAttribute) {
+    return ele.hasAttribute(attr);
+  } else {
+    return !!(ele.attributes[attr] && ele.attributes[attr].specified);
+  }
+};
 
 _.filter = function (arr, fn, self) {
   var hasOwn = Object.prototype.hasOwnProperty;
@@ -468,6 +472,29 @@ _.parseSuperProperties = function(obj) {
     _.strip_sa_properties(obj);
   }
 };
+
+
+/**
+ * @description 过滤掉事件的属性名为保留字段的属性
+ * @param {object} obj 属性对象
+ */
+_.filterReservedProperties = function(obj){
+  var reservedFields =['distinct_id','user_id','id','date','datetime','event','events','first_id','original_id','device_id','properties','second_id','time','users'];
+  if(!_.isObject(obj)){
+    return;
+  }
+  _.each(reservedFields, function(key,index){
+    if(!(key in obj)){
+      return;
+    }
+    if(index < 3){
+      delete obj[key];
+      sd.log("您的属性- " + key + '是保留字段，我们已经将其删除')
+    }else{
+      sd.log("您的属性- " + key + '是保留字段，请避免其作为属性名')
+    }
+  });
+}
 
 // 去除$option的配置数据
 _.searchConfigData = function(data){
@@ -1116,7 +1143,7 @@ _.getElementContent = function(target,tagName){
   element_content = textContent || '';
 
   // 针对inut默认只采集button和submit非名感的词汇。可以自定义（银联提）
-  if(tagName === 'input' || tagName === 'INPUT'){
+  if(tagName === 'input'|| tagName === 'INPUT'){
     if(target.type === 'button' || target.type === 'submit'){
       element_content = target.value || '';
     } else if (sd.para.heatmap && (typeof sd.para.heatmap.collect_input === 'function') && sd.para.heatmap.collect_input(target)){
@@ -1472,6 +1499,16 @@ _.URL = function(url) {
   };
   if (typeof window.URL === 'function' && isURLAPIWorking()) {
     result = new URL(url);
+    if (!result.searchParams) {
+      result.searchParams = (function(){
+        var params = _.getURLSearchParams(result.search);
+        return {
+          get: function(searchParam) {
+            return params[searchParam];
+          }
+        };
+      })();
+    }
   } else {
     var _regex = /^https?:\/\/.+/;
     if(_regex.test(url) === false) {
@@ -2060,7 +2097,12 @@ sd的各个方法，包含sdk的一些基本功能
     datasend_timeout: 3000,
     queue_timeout: 300,
     is_track_device_id: false,
-    use_app_track: false,
+    use_app_track_config:{
+      use_app_track: false,
+      use_app_track_is_send: true,
+      white_list:[],
+      H5verify:false
+    },
     ignore_oom: true
   };
 
@@ -2101,6 +2143,14 @@ sd.initPara = function(para){
   }
 
   sd.para.preset_properties = _.extend({}, sd.para_default.preset_properties, latestObj, sd.para.preset_properties || {});
+  var app_track_config = {};
+  if(sd.para.use_app_track){
+    app_track_config.use_app_track = sd.para.use_app_track;
+  }
+  if(sd.para.use_app_track_is_send){
+    app_track_config.use_app_track_is_send = sd.para.use_app_track_is_send;  
+  }
+  sd.para.use_app_track_config = _.extend({},sd.para_default.use_app_track_config,app_track_config,sd.para.use_app_track_config || {})
 
   var i;
   // 合并配置
@@ -2222,7 +2272,7 @@ sd.setPreConfig = function(sa){
 
 sd.setInitVar= function(){
   sd._t = sd._t || 1 * new Date();
-  sd.lib_version = '1.14.21';
+  sd.lib_version = '1.14.23';
   sd.is_first_visitor = false;
   // 标准广告系列来源
   sd.source_channel_standard = 'utm_source utm_medium utm_campaign utm_content utm_term';
@@ -2314,13 +2364,14 @@ sd.debug = {
       '2': name + 'Android或者iOS，没有暴露相应方法',
       '3.1': name + 'Android校验server_url失败',
       '3.2': name + 'iOS校验server_url失败',
-      '4.1': 'WKWebView SDK，未设置 host 和 project, 成功发往iOS SDK',
-      '4.2': 'WKWebView SDK，设置了 host 和 project但不匹配，成功发往 web server_url',
-      '4.3': 'WKWebView SDK，设置了匹配的 host 和 project，成功发往 iOS SDK'
+      '4.1': name + 'H5 校验 iOS server_url 失败',
+      '4.2': name + 'H5 校验 Android server_url 失败',
+      '4.3': name + 'H5 数据成功发往 Android',
+      '4.4': name + 'H5 数据成功发往 iOS'
     };
     var output = obj.output;
     var step = obj.step;
-    var data = obj.data;
+    var data = obj.data || '';
     // 控制台输出
     if(output === 'all' || output === 'console'){
       sd.log(relation[step]);
@@ -2416,7 +2467,7 @@ sd.debug = {
       if((typeof target === 'object') && target.tagName){
         var tagName = target.tagName.toLowerCase();
         var parent_ele = target.parentNode.tagName.toLowerCase();
-        if (tagName !== 'button' && tagName !== 'a' && parent_ele !== 'a' && parent_ele !== 'button' && tagName !== 'input' && tagName !== 'textarea' && !target.hasAttribute('data-sensors-click')) {
+        if (tagName !== 'button' && tagName !== 'a' && parent_ele !== 'a' && parent_ele !== 'button' && tagName !== 'input' && tagName !== 'textarea' && !_.hasAttribute(target, 'data-sensors-click')) {
           heatmap.start(null,target,tagName, props, callback);
         }
       }
@@ -2546,7 +2597,8 @@ sd.debug = {
       if(_.isEmptyObject(sd.store._state)){
         return '请先初始化SDK';
       }else{
-        return sd.store._state.first_id ? sd.store._state.first_id : sd.store._state.distinct_id;
+        // 优先使用临时属性
+        return sd.store._state._first_id || sd.store._state.first_id || sd.store._state._distinct_id || sd.store._state.distinct_id;
       }
     }
 
@@ -3247,31 +3299,44 @@ sendState.getSendCall = function(data, config, callback) {
     callback: callback
   };
 
-  if(!sd.para.use_app_track && sd.para.batch_send && localStorage.length < 200){
+  if(!sd.para.use_app_track_config.use_app_track && sd.para.batch_send && localStorage.length < 200){
     sd.log(originData);
     sd.batchSend.add(this.requestData.data);
     return false;
   }
 
   // 打通app传数据给app
-  if(sd.para.use_app_track === true || sd.para.use_app_track === 'only'){
-    // iOS WKWebView
-    if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker) {
-      if (_.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_project && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_host) {
-        var ioswkwebviewhostname = null;
-        var ioswkwebviewproject = null;
-        try{
-          ioswkwebviewhostname = _.URL(sd.para.server_url).hostname;
-          ioswkwebviewproject = _.URL(sd.para.server_url).searchParams.get('project') || 'default';
-        }catch(e){};
-        if (ioswkwebviewhostname === window.SensorsData_iOS_JS_Bridge.sensorsdata_app_host && ioswkwebviewproject === window.SensorsData_iOS_JS_Bridge.sensorsdata_app_project) {
+  if(sd.para.use_app_track_config.use_app_track === true || sd.para.use_app_track_config.use_app_track === 'only'){
+    //如果有新版，优先用新版
+    if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url) {
+      if(sd.para.use_app_track_config.H5verify){
           sd.debug.apph5({
             data: originData,
-            step: '4.3',
+            step: '4.4',
             output:'all'
           });
           window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify({callType:'app_h5_track', data: _.extend({server_url:sd.para.server_url}, originData)}));
-        } else {
+      }else{
+        if(sd.para.use_app_track_config.use_app_track_is_send){
+          sd.debug.apph5({
+            data: originData,
+            step: '4.1',
+            output:'all'
+          });
+          this.prepareServerUrl();
+        }
+        
+      }
+    }else if(_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track){
+      if(sd.para.use_app_track_config.H5verify){
+        sd.debug.apph5({
+          data: originData,
+          step: '4.3',
+          output:'all'
+        });
+        SensorsData_APP_New_H5_Bridge.sensorsdata_track(JSON.stringify(_.extend({server_url:sd.para.server_url},originData)));
+      }else{
+        if(sd.para.use_app_track_config.use_app_track_is_send){
           sd.debug.apph5({
             data: originData,
             step: '4.2',
@@ -3279,26 +3344,21 @@ sendState.getSendCall = function(data, config, callback) {
           });
           this.prepareServerUrl();
         }
-      } else {
-        // 未配置 host 和 project，依然发往 iOS SDK
-        sd.debug.apph5({
-          data: originData,
-          step: '4.1',
-          output:'all'
-        });
-        window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify({callType:'app_h5_track', data: _.extend({server_url:sd.para.server_url}, originData)}));
-      }
-    } else if((typeof SensorsData_APP_JS_Bridge === 'object') && (SensorsData_APP_JS_Bridge.sensorsdata_verify || SensorsData_APP_JS_Bridge.sensorsdata_track)){
-    // 如果有新版方式，优先用新版
+ 
+      }   
+    }else if((typeof SensorsData_APP_JS_Bridge === 'object') && (SensorsData_APP_JS_Bridge.sensorsdata_verify || SensorsData_APP_JS_Bridge.sensorsdata_track)){
+      // 如果有新版方式，优先用新版
       if(SensorsData_APP_JS_Bridge.sensorsdata_verify){
         // 如果校验通过则结束，不通过则降级改成h5继续发送
         if(!SensorsData_APP_JS_Bridge.sensorsdata_verify(JSON.stringify(_.extend({server_url:sd.para.server_url},originData)))){
-          sd.debug.apph5({
-            data: originData,
-            step: '3.1',
-            output:'all'
-          });
-          this.prepareServerUrl();
+          if (sd.para.use_app_track_config.use_app_track_is_send) {
+            sd.debug.apph5({
+              data: originData,
+              step: '3.1',
+              output:'all'
+            });
+            this.prepareServerUrl();
+          }
         }else{
           (typeof callback === 'function') && callback();
         }
@@ -3325,13 +3385,15 @@ sendState.getSendCall = function(data, config, callback) {
             iframe.parentNode.removeChild(iframe);
             iframe = null;
             (typeof callback === 'function') && callback();
-          }else{
-            sd.debug.apph5({
-              data: originData,
-              step: '3.2',
-              output:'all'
-            });
-            this.prepareServerUrl();
+          } else {
+            if (sd.para.use_app_track_config.use_app_track_is_send) {
+              sd.debug.apph5({
+                data: originData,
+                step: '3.2',
+                output:'all'
+              });
+              this.prepareServerUrl();
+            }
           }
         }
       }else{
@@ -3343,7 +3405,7 @@ sendState.getSendCall = function(data, config, callback) {
         (typeof callback === 'function') && callback();
       }
     }else{
-      if(sd.para.use_app_track === true){
+      if(sd.para.use_app_track_config.use_app_track === true && sd.para.use_app_track_config.use_app_track_is_send === true){
         sd.debug.apph5({
           data: originData,
           step: '2',
@@ -3352,7 +3414,7 @@ sendState.getSendCall = function(data, config, callback) {
         this.prepareServerUrl();
       }
     }
-  }else if(sd.para.use_app_track === 'mui'){
+  }else if(sd.para.use_app_track_config.use_app_track === 'mui'){
     if(_.isObject(window.plus) && window.plus.SDAnalytics && window.plus.SDAnalytics.trackH5Event){
       window.plus.SDAnalytics.trackH5Event(data);
     }
@@ -3570,6 +3632,7 @@ saEvent.send = function(p, callback) {
   // Parse super properties that added by registerPage()
   _.parseSuperProperties(data.properties);
 
+  _.filterReservedProperties(data.properties);
   _.searchObjDate(data);
   _.searchObjString(data);
   // 兼容灼洲app端做的$project和$token而加的代码
@@ -3637,11 +3700,11 @@ cookie的数据存储
         return this._sessionState;
       },
       getDistinctId: function() {
-        return this._state.distinct_id;
+        return this._state._distinct_id || this._state.distinct_id;
       },
       getUnionId: function() {
         var obj = {};
-        var firstId = this._state.first_id, distinct_id = this._state.distinct_id;
+        var firstId = this._state._first_id || this._state.first_id, distinct_id = this._state._distinct_id || this._state.distinct_id;
         if (firstId && distinct_id) {
           obj.login_id = distinct_id;
           obj.anonymous_id = firstId;
@@ -3651,7 +3714,7 @@ cookie的数据存储
         return obj;
       },
       getFirstId: function(){
-        return this._state.first_id;
+        return this._state._first_id || this._state.first_id;
       },
       toState: function(ds) {
         var state = null;
@@ -3693,11 +3756,18 @@ cookie的数据存储
       set: function(name, value) {
         this._state = this._state || {};
         this._state[name] = value;
+        // 如果set('first_id') 或者 set('distinct_id')，删除对应的临时属性
+        if (name === 'first_id') {
+          delete this._state._first_id;
+        } else if (name === 'distinct_id') {
+          delete this._state._distinct_id;
+        }
         this.save();
       },
       // 针对当前页面修改
       change: function(name, value) {
-        this._state[name] = value;
+        // 为临时属性名增加前缀 _ (下划线)
+        this._state['_' + name] = value;
       },
       setSessionProps: function(newp) {
         var props = this._sessionState;
@@ -3751,7 +3821,12 @@ cookie的数据存储
       _.cookie.set('sensorsdata2015session', JSON.stringify(this._sessionState), 0);
     },
     save: function() {
-      _.cookie.set(this.getCookieName(), JSON.stringify(this._state), 73000, sd.para.cross_subdomain);
+      // 深拷贝避免修改原对象
+      var copyState = JSON.parse(JSON.stringify(this._state));
+      // 删除临时属性避免写入cookie
+      delete copyState._first_id;
+      delete copyState._distinct_id;
+      _.cookie.set(this.getCookieName(), JSON.stringify(copyState), 73000, sd.para.cross_subdomain);
     },
     getCookieName: function(){
       var sub = '';
@@ -4257,7 +4332,7 @@ var saNewUser = {
 
         var parent_ele = target.parentNode;
 
-        if(tagName === 'a' || tagName === 'button' || tagName === 'input' || tagName === 'textarea' || target.hasAttribute('data-sensors-click')){
+        if(tagName === 'a' || tagName === 'button' || tagName === 'input' || tagName === 'textarea' || _.hasAttribute(target, 'data-sensors-click')){
           that.start(ev, target, tagName);
         }else if(parent_ele.tagName.toLowerCase() === 'button' || parent_ele.tagName.toLowerCase() === 'a'){
           that.start(ev, parent_ele, target.parentNode.tagName.toLowerCase());
@@ -4274,18 +4349,73 @@ var saNewUser = {
 
   },
   initDefineMode : function(){
-    _.loadScript({
-      success:function(){
-          setTimeout(function(){
-            if(typeof sa_jssdk_app_define_mode !== 'undefined'){
-              sa_jssdk_app_define_mode(sd);
+    if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
+      if(sd.para.use_app_track_config.H5verify){
+        _.loadScript({
+          success:function(){
+              setTimeout(function(){
+                if(typeof sa_jssdk_app_define_mode !== 'undefined'){
+                  sa_jssdk_app_define_mode(sd);
+                }
+              },0);
+          },
+          error:function(){},
+          type:'js',
+          url: './1061new/vapph5define.js'
+        });
+      }else{
+
+      }
+    }
+    
+  },
+  initAppH5status : function(){
+    function checkProjectAndHost(appUrl){
+      function getHostNameAndProject(url){
+        var obj = {
+          hostname:'',
+          project:''
+        };
+        try{
+          obj.hostname = _.URL(url).hostname;
+          obj.project = _.URL(url).searchParams.get('project') || 'default';
+        }catch(e){
+          console.log(e);
+        }
+        return obj;
+      }
+      var appObj = getHostNameAndProject(appUrl);
+      var H5Obj = getHostNameAndProject(sd.para.server_url);
+      if(appObj.hostname === H5Obj.hostname && appObj.project === H5Obj.project){
+         return true;
+      }else{
+        if(sd.para.use_app_track_config.white_list[0]){
+          for(var i=0;i<sd.para.use_app_track_config.white_list.length;i++){
+            var urlobj = getHostNameAndProject(sd.para.use_app_track_config.white_list[i]);
+            if(urlobj.hostname === appObj.hostname && urlobj.project === appObj.project){
+              return true;
             }
-          },0);
-      },
-      error:function(){},
-      type:'js',
-      url: 'https://869359954.github.io/sadefine/vapph5define.js'
-    });
+          }
+        }
+      }
+      
+    }
+    if(sd.para.use_app_track_config.use_app_track === true){
+      if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url) {
+          if(checkProjectAndHost(window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)){
+            sd.para.use_app_track_config.H5verify = true;
+          }
+         
+      }else if(_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track){
+        var app_server_url = window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url();
+        if(app_server_url){
+          if(checkProjectAndHost(app_server_url)){
+            sd.para.use_app_track_config.H5verify = true;
+          }
+        }
+     
+      }
+    }
   },
   prepare:function(todo){
     var match = location.search.match(/sa-request-id=([^&#]+)/);
@@ -4346,14 +4476,8 @@ var saNewUser = {
       heatmap.setNotice();
       isReady(sessionStorage.getItem('sensors_heatmap_id'),sessionStorage.getItem('sensors_heatmap_type'),location.href);
     }else{
-      //圈选模式加载 define.js 但是不影响正常数据采集流程
-      if(sd.para.use_app_track === true && ((typeof SensorsData_iOS_JS_Bridge === 'object' && SensorsData_iOS_JS_Bridge.sensorsdata_define_mode) || (typeof SensorsData_APP_JS_Bridge === 'object' && SensorsData_APP_JS_Bridge.sensorsdata_define_mode))){
-        if (!_.isObject(sd.para.heatmap) || sd.para.heatmap.clickmap !== 'default') {
-          alert('H5 未开启全埋点！');
-        }else{
-          this.initDefineMode();
-        }
-      }
+      me.initAppH5status();
+      me.initDefineMode();
       todo();
       //进入热力图采集模式
       if (_.isObject(sd.para.heatmap)) {
