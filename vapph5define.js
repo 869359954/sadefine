@@ -10,7 +10,7 @@
                 var target = obj[i];
                 var tagname = target.tagName;
                 var overflow = window.getComputedStyle(target,null).getPropertyValue("overflow"); 
-                if(tagname === 'A' || tagname === 'BUTTON' || tagname === 'INPUT' ||tagname === 'TEXTAREA'|| target.hasAttribute('data-sensors-click')){
+                if(tagname === 'A' || tagname === 'BUTTON' || tagname === 'INPUT' ||tagname === 'TEXTAREA'){
                     var tagstore = {
                         level : index,
                         id : 'h' + DefineTagNum
