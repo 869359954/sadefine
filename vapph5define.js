@@ -69,13 +69,17 @@
     //获取可圈选子元素
     function getSubElements(el){
         var elementsArr = [];
-        if(el.children){
-            for(var i=0;i<el.children.length;i++){
-                if(typeof(el.children[i].sensorsDefineStore) == 'object' && el.children[i].sensorsDefineStore.id){
-                     elementsArr.push(el.children[i].sensorsDefineStore.id);
+        function testTag(el){
+            if(el.children){
+                for(var i=0;i<el.children.length;i++){
+                    if(typeof(el.children[i].sensorsDefineStore) == 'object' && el.children[i].sensorsDefineStore.id){
+                         elementsArr.push(el.children[i].sensorsDefineStore.id);
+                    }
+                    testTag(el.children[i]);
                 }
             }
         }
+        testTag(el);
         return elementsArr;
     }
     //获取元素信息
@@ -83,7 +87,6 @@
         var po = el.getBoundingClientRect();
         var tagname = el.tagName;
         var obj = {
-            // el : el,
             id : el.sensorsDefineStore.id,
             $element_content : sdStore._.getElementContent(el,tagname),
             $element_selector : sdStore.heatmap.getDomSelector(el),
@@ -99,7 +102,6 @@
             $url : location.href,
             $title : document.title,
             zIndex : getZIndex(el),
-            // zindex:getZIndex(el),
             subelements : getSubElements(el)
         };
         return obj;
