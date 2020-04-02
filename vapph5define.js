@@ -23,7 +23,7 @@
                     arr.push(target);
                 }       
     　　　　　　  if(target.children){
-                    if(overflow == 'hidden'){
+                    if(overflow == 'hidden' || overflow == 'scroll'){
                         func(target.children,index+1,target);
                     }else if(overflowElement){
                         func(target.children,index+1,overflowElement);

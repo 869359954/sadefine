@@ -4350,22 +4350,29 @@ var saNewUser = {
   },
   initDefineMode : function(){
     if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
-      if(sd.para.use_app_track_config.H5verify){
-        _.loadScript({
-          success:function(){
-              setTimeout(function(){
-                if(typeof sa_jssdk_app_define_mode !== 'undefined'){
-                  sa_jssdk_app_define_mode(sd);
-                }
-              },0);
-          },
-          error:function(){},
-          type:'js',
-          url: './vapph5define.js'
-        });
+      if(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default'){
+        if(sd.para.use_app_track_config.H5verify){
+          _.loadScript({
+            success:function(){
+                setTimeout(function(){
+                  if(typeof sa_jssdk_app_define_mode !== 'undefined'){
+                    sa_jssdk_app_define_mode(sd);
+                  }
+                },0);
+            },
+            error:function(){},
+            type:'js',
+            url: './vapph5define.js'
+          });
+        }else{
+          //打通失败弹框逻辑
+          
+        }
       }else{
-
+        //未开启全埋点弹框
       }
+
+      
     }
     
   },
@@ -4404,6 +4411,8 @@ var saNewUser = {
       if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url) {
           if(checkProjectAndHost(window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)){
             sd.para.use_app_track_config.H5verify = true;
+          }else{
+            sd.para.use_app_track_config.debugInfo = '数据地址校验不通过'
           }
          
       }else if(_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track){
@@ -4411,10 +4420,16 @@ var saNewUser = {
         if(app_server_url){
           if(checkProjectAndHost(app_server_url)){
             sd.para.use_app_track_config.H5verify = true;
+          }else{
+            sd.para.use_app_track_config.debugInfo = '数据地址校验不通过'
           }
         }
      
+      }else{
+        sd.para.use_app_track_config.debugInfo = 'App 未开启打通'
       }
+    }else{
+      sd.para.use_app_track_config.debugInfo = 'JS 未开启打通'
     }
   },
   prepare:function(todo){
