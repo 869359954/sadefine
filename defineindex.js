@@ -34,10 +34,8 @@
                 // element_selector:'not_use_id',
             },
             is_track_single_page:true,
-            use_app_track_config:{
-                use_app_track:true,
-                white_list:[]
-             
+            app_js_bridge:{
+                
             }
             });
             

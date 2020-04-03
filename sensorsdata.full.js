@@ -2097,13 +2097,8 @@ sd的各个方法，包含sdk的一些基本功能
     datasend_timeout: 3000,
     queue_timeout: 300,
     is_track_device_id: false,
-    use_app_track_config:{
-      use_app_track: false,
-      use_app_track_is_send: true,
-      white_list:[],
-      H5verify:false
-    },
-    ignore_oom: true
+    ignore_oom: true,
+    app_js_bridge: false
   };
 
 sd.addReferrerHost = function(data) {
@@ -2143,15 +2138,77 @@ sd.initPara = function(para){
   }
 
   sd.para.preset_properties = _.extend({}, sd.para_default.preset_properties, latestObj, sd.para.preset_properties || {});
-  var app_track_config = {};
-  if(sd.para.use_app_track){
-    app_track_config.use_app_track = sd.para.use_app_track;
+ 
+  var app_js_bridge_default = {
+    is_send : true,
+    white_list:[],
+    H5verify : false,
+  };
+  if(sd.para.use_app_track === true || sd.para.app_js_bridge === true){
+    if(sd.para.use_app_track_is_send === false){
+      sd.para.app_js_bridge_default.is_send = false;
+    }
+    sd.para.app_js_bridge = _.extend({},app_js_bridge_default);
+  }else if(typeof sd.para.app_js_bridge === 'object'){
+    sd.para.app_js_bridge = _.extend({},app_js_bridge_default,sd.para.app_js_bridge);
+  }else if(sd.para.use_app_track === 'only' || sd.para.use_app_track === 'mui'){
+    sd.para.app_js_bridge = sd.para.use_app_track;
   }
-  if(sd.para.use_app_track_is_send){
-    app_track_config.use_app_track_is_send = sd.para.use_app_track_is_send;  
+  function initAppH5Status(){
+    function checkProjectAndHost(appUrl){
+      function getHostNameAndProject(url){
+        var obj = {
+          hostname:'',
+          project:''
+        };
+        try{
+          obj.hostname = _.URL(url).hostname;
+          obj.project = _.URL(url).searchParams.get('project') || 'default';
+        }catch(e){
+          console.log(e);
+        }
+        return obj;
+      }
+      var appObj = getHostNameAndProject(appUrl);
+      var H5Obj = getHostNameAndProject(sd.para.server_url);
+      if(appObj.hostname === H5Obj.hostname && appObj.project === H5Obj.project){
+         return true;
+      }else{
+        if(sd.para.app_js_bridge.white_list[0]){
+          for(var i=0;i<sd.para.app_js_bridge.white_list.length;i++){
+            var urlobj = getHostNameAndProject(sd.para.app_js_bridge.white_list[i]);
+            if(urlobj.hostname === appObj.hostname && urlobj.project === appObj.project){
+              return true;
+            }
+          }
+        }
+      }
+      
+    }
+    if(_.isObject(sd.para.app_js_bridge)){
+      if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url) {
+          if(checkProjectAndHost(window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)){
+            sd.para.app_js_bridge.H5verify = true;
+          }else{
+            //为圈选弹框保存debug信息 校验 server_url 失败 
+          }
+         
+      }else if(_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track){
+        var app_server_url = window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url();
+        if(app_server_url){
+          if(checkProjectAndHost(app_server_url)){
+            sd.para.app_js_bridge.H5verify = true;
+          }else{
+            //为圈选弹框保存debug信息 校验 server_url 失败
+          }
+        }
+     
+      }else{
+        //为圈选弹框保存debug信息 App 打通未配置
+      }
+    }
   }
-  sd.para.use_app_track_config = _.extend({},sd.para_default.use_app_track_config,app_track_config,sd.para.use_app_track_config || {})
-
+  initAppH5Status();
   var i;
   // 合并配置
   for (i in sd.para_default) {
@@ -3299,17 +3356,17 @@ sendState.getSendCall = function(data, config, callback) {
     callback: callback
   };
 
-  if(!sd.para.use_app_track_config.use_app_track && sd.para.batch_send && localStorage.length < 200){
+  if(!sd.para.app_js_bridge && sd.para.batch_send && localStorage.length < 200){
     sd.log(originData);
     sd.batchSend.add(this.requestData.data);
     return false;
   }
 
   // 打通app传数据给app
-  if(sd.para.use_app_track_config.use_app_track === true || sd.para.use_app_track_config.use_app_track === 'only'){
+  if(_.isObject(sd.para.app_js_bridge) || sd.para.app_js_bridge === 'only'){
     //如果有新版，优先用新版
     if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url) {
-      if(sd.para.use_app_track_config.H5verify){
+      if(sd.para.app_js_bridge.H5verify){
           sd.debug.apph5({
             data: originData,
             step: '4.4',
@@ -3317,7 +3374,7 @@ sendState.getSendCall = function(data, config, callback) {
           });
           window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify({callType:'app_h5_track', data: _.extend({server_url:sd.para.server_url}, originData)}));
       }else{
-        if(sd.para.use_app_track_config.use_app_track_is_send){
+        if(sd.para.app_js_bridge.is_send){
           sd.debug.apph5({
             data: originData,
             step: '4.1',
@@ -3328,7 +3385,7 @@ sendState.getSendCall = function(data, config, callback) {
         
       }
     }else if(_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track){
-      if(sd.para.use_app_track_config.H5verify){
+      if(sd.para.app_js_bridge.H5verify){
         sd.debug.apph5({
           data: originData,
           step: '4.3',
@@ -3336,7 +3393,7 @@ sendState.getSendCall = function(data, config, callback) {
         });
         SensorsData_APP_New_H5_Bridge.sensorsdata_track(JSON.stringify(_.extend({server_url:sd.para.server_url},originData)));
       }else{
-        if(sd.para.use_app_track_config.use_app_track_is_send){
+        if(sd.para.app_js_bridge.is_send){
           sd.debug.apph5({
             data: originData,
             step: '4.2',
@@ -3351,7 +3408,7 @@ sendState.getSendCall = function(data, config, callback) {
       if(SensorsData_APP_JS_Bridge.sensorsdata_verify){
         // 如果校验通过则结束，不通过则降级改成h5继续发送
         if(!SensorsData_APP_JS_Bridge.sensorsdata_verify(JSON.stringify(_.extend({server_url:sd.para.server_url},originData)))){
-          if (sd.para.use_app_track_config.use_app_track_is_send) {
+          if (sd.para.app_js_bridge.is_send) {
             sd.debug.apph5({
               data: originData,
               step: '3.1',
@@ -3386,7 +3443,7 @@ sendState.getSendCall = function(data, config, callback) {
             iframe = null;
             (typeof callback === 'function') && callback();
           } else {
-            if (sd.para.use_app_track_config.use_app_track_is_send) {
+            if (sd.para.app_js_bridge.is_send) {
               sd.debug.apph5({
                 data: originData,
                 step: '3.2',
@@ -3405,7 +3462,7 @@ sendState.getSendCall = function(data, config, callback) {
         (typeof callback === 'function') && callback();
       }
     }else{
-      if(sd.para.use_app_track_config.use_app_track === true && sd.para.use_app_track_config.use_app_track_is_send === true){
+      if(_.isObject(sd.para.app_js_bridge) && sd.para.app_js_bridge.is_send === true){
         sd.debug.apph5({
           data: originData,
           step: '2',
@@ -3414,7 +3471,7 @@ sendState.getSendCall = function(data, config, callback) {
         this.prepareServerUrl();
       }
     }
-  }else if(sd.para.use_app_track_config.use_app_track === 'mui'){
+  }else if(sd.para.app_js_bridge === 'mui'){
     if(_.isObject(window.plus) && window.plus.SDAnalytics && window.plus.SDAnalytics.trackH5Event){
       window.plus.SDAnalytics.trackH5Event(data);
     }
@@ -4351,7 +4408,7 @@ var saNewUser = {
   initDefineMode : function(){
     if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
       if(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default'){
-        if(sd.para.use_app_track_config.H5verify){
+        if(sd.para.app_js_bridge.H5verify){
           _.loadScript({
             success:function(){
                 setTimeout(function(){
@@ -4365,7 +4422,7 @@ var saNewUser = {
             url: './vapph5define.js'
           });
         }else{
-          //打通失败弹框逻辑
+          //打通失败弹框debug信息传给App 
           
         }
       }else{
@@ -4375,62 +4432,6 @@ var saNewUser = {
       
     }
     
-  },
-  initAppH5status : function(){
-    function checkProjectAndHost(appUrl){
-      function getHostNameAndProject(url){
-        var obj = {
-          hostname:'',
-          project:''
-        };
-        try{
-          obj.hostname = _.URL(url).hostname;
-          obj.project = _.URL(url).searchParams.get('project') || 'default';
-        }catch(e){
-          console.log(e);
-        }
-        return obj;
-      }
-      var appObj = getHostNameAndProject(appUrl);
-      var H5Obj = getHostNameAndProject(sd.para.server_url);
-      if(appObj.hostname === H5Obj.hostname && appObj.project === H5Obj.project){
-         return true;
-      }else{
-        if(sd.para.use_app_track_config.white_list[0]){
-          for(var i=0;i<sd.para.use_app_track_config.white_list.length;i++){
-            var urlobj = getHostNameAndProject(sd.para.use_app_track_config.white_list[i]);
-            if(urlobj.hostname === appObj.hostname && urlobj.project === appObj.project){
-              return true;
-            }
-          }
-        }
-      }
-      
-    }
-    if(sd.para.use_app_track_config.use_app_track === true){
-      if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url) {
-          if(checkProjectAndHost(window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)){
-            sd.para.use_app_track_config.H5verify = true;
-          }else{
-            sd.para.use_app_track_config.debugInfo = '数据地址校验不通过'
-          }
-         
-      }else if(_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track){
-        var app_server_url = window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url();
-        if(app_server_url){
-          if(checkProjectAndHost(app_server_url)){
-            sd.para.use_app_track_config.H5verify = true;
-          }else{
-            sd.para.use_app_track_config.debugInfo = '数据地址校验不通过'
-          }
-        }
-     
-      }else{
-        sd.para.use_app_track_config.debugInfo = 'App 未开启打通'
-      }
-    }else{
-      sd.para.use_app_track_config.debugInfo = 'JS 未开启打通'
-    }
   },
   prepare:function(todo){
     var match = location.search.match(/sa-request-id=([^&#]+)/);
@@ -4491,7 +4492,6 @@ var saNewUser = {
       heatmap.setNotice();
       isReady(sessionStorage.getItem('sensors_heatmap_id'),sessionStorage.getItem('sensors_heatmap_type'),location.href);
     }else{
-      me.initAppH5status();
       me.initDefineMode();
       todo();
       //进入热力图采集模式
