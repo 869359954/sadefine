@@ -5,31 +5,21 @@
         var arr = [];
         var DefineTagNum = 0;
         //递归便利获取所有可圈选元素的信息 obj
-        function func(obj,index,overflowElement){
+        function func(obj,index){
             for(var i=0;i<obj.length;i++){
                 var target = obj[i];
                 var tagname = target.tagName;
-                var overflow = window.getComputedStyle(target,null).getPropertyValue("overflow"); 
                 if(tagname === 'A' || tagname === 'BUTTON' || tagname === 'INPUT' ||tagname === 'TEXTAREA'){
                     var tagstore = {
                         level : index,
                         id : 'h' + DefineTagNum
                     };
                     DefineTagNum ++;
-                    if(overflowElement){
-                        tagstore.overflowElement = overflowElement;
-                    }
                     target.sensorsDefineStore = tagstore;
                     arr.push(target);
                 }       
     　　　　　　  if(target.children){
-                    if(overflow == 'hidden' || overflow == 'scroll'){
-                        func(target.children,index+1,target);
-                    }else if(overflowElement){
-                        func(target.children,index+1,overflowElement);
-                    }else{
-                        func(target.children,index+1);
-                    }
+                  func(target.children,index+1);
     　　　　　    }
     　　　　 } 
         }    
@@ -42,9 +32,7 @@
 
         function _isVisible(el) {
             var p = el.parentNode;
-            if ( !_elementInDocument(el) ){
-                return false;
-            }
+            
             if ( 9 === p.nodeType ) {
                 return true;
             }
@@ -82,14 +70,7 @@
             }
         }
     
-        function _elementInDocument(element) {
-            while (element = element.parentNode) {
-                if (element == document) {
-                        return true;
-                }
-            }
-            return false;
-        }
+        
     }
     //zIndex 取值为 level+zIndex
     function getZIndex(el){
@@ -98,7 +79,6 @@
         if(zIndex && !isNaN(+zIndex)){
             indexNum = +zIndex;
         }
-        console.log(el.sensorsDefineStore,sdStore._.isObject(el.sensorsDefineStore));
         if(sdStore._.isObject(el.sensorsDefineStore)){
             indexNum += el.sensorsDefineStore.level;
         }
@@ -136,7 +116,7 @@
             width : po.width,
             height : po.height,
             scale : window.devicePixelRatio,
-            visibility : getVisibility(el,po),
+            visibility : getVisibility(el),
             $url : location.href,
             $title : document.title,
             zIndex : getZIndex(el),
