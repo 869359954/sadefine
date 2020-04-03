@@ -37,20 +37,58 @@
         return arr;
 
     }
-    function getVisibility(el,po){
-        var visibility = window.getComputedStyle(el,null).getPropertyValue("visibility");
-        var opacity = window.getComputedStyle(el,null).getPropertyValue("opacity");
-        var overHide = false;
-        if(typeof(el.sensorsDefineStore) == 'object' && el.sensorsDefineStore.overflowElement){
-            var overParentPo = el.sensorsDefineStore.overflowElement.getBoundingClientRect();
-            if((po.bottom<=overParentPo.top)||(po.top>=overParentPo.bottom)||(po.right<=overParentPo.left)||(po.left>=overParentPo.right)){
-                overHide = true;
+    function getVisibility(el){
+        return (_isVisible(el));
+
+        function _isVisible(el) {
+            var p = el.parentNode;
+            if ( !_elementInDocument(el) ){
+                return false;
+            }
+            if ( 9 === p.nodeType ) {
+                return true;
+            }
+            if (
+                 '0' === _getStyle(el, 'opacity') ||
+                 'none' === _getStyle(el, 'display') ||
+                 'hidden' === _getStyle(el, 'visibility')
+            ) {
+                return false;
+            }
+            var po = el.getBoundingClientRect();
+            if ( p ) {
+                if ( ('hidden' === _getStyle(p, 'overflow') || 'scroll' === _getStyle(p, 'overflow')) ) {
+                    var parentPo = p.getBoundingClientRect();
+                    if (
+                        (po.bottom <= parentPo.top)||
+                        (po.top >= parentPo.bottom)||
+                        (po.right <= parentPo.left)||
+                        (po.left >= parentPo.right)
+                    ) {  
+                        return false;
+                    }
+                }
+                return _isVisible(p);
+            }
+            return true;
+        }
+    
+        function _getStyle(el, property) {
+            if ( window.getComputedStyle ) {
+                return document.defaultView.getComputedStyle(el,null)[property];
+            }
+            if ( el.currentStyle ) {
+                return el.currentStyle[property];
             }
         }
-        if(po.height == 0 || visibility == "hidden" || opacity == 0 || overHide){　
-            　　return false;
-        }else{
-            　　return true;
+    
+        function _elementInDocument(element) {
+            while (element = element.parentNode) {
+                if (element == document) {
+                        return true;
+                }
+            }
+            return false;
         }
     }
     //zIndex 取值为 level+zIndex
