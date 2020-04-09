@@ -170,9 +170,13 @@
             subtree: true,
             attributes: true
         }; 
-        observe(document.body, options, sdStore._.throttle(callback, 1000));
-        sdStore._.addEvent(window,'scroll',sdStore._.throttle(callback, 1000));
-
+        var changeFunc = (function listener(){
+            return sdStore._.throttle(callback,1000);
+        })();
+        observe(document.body, options, changeFunc);
+        sdStore._.addEvent(window,'scroll',changeFunc);
+        sdStore._.addEvent(window,'resize',changeFunc);
+        sdStore._.addEvent(window,'load',changeFunc);
     }
    
     
