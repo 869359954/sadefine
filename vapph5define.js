@@ -23,17 +23,18 @@
                     var tags = ['input','a','button','textarea'];
                     var tagname = target.tagName.toLowerCase();
                     var parent_ele = target.parentNode;
+                    var parent_ele_tagName = parent_ele?parent_ele.tagName ? parent_ele.tagName.toLowerCase() : null:null;
                     var grand_ele = parent_ele.parentNode;
+                    var grand_ele_tagName = grand_ele ? grand_ele.tagName ? grand_ele.tagName.toLowerCase() : null:null;
                     
-                    if(parent_ele == document){
-                        
-                    }else if(tags.indexOf(tagname) > -1){
+                    if(tags.indexOf(tagname) > -1){
                         targetHandle(target,index);
-                    }else if (parent_ele && parent_ele.tagName && parent_ele.tagName.toLowerCase && parent_ele.tagName.toLowerCase() === 'button' || parent_ele.tagName.toLowerCase() === 'a') {
+                    }else if (parent_ele && (parent_ele_tagName === 'button' || parent_ele_tagName === 'a')) {
                         targetHandle(parent_ele,index);
-                    }else if(grand_ele && grand_ele.tagName && grand_ele.tagName.toLowerCase && (grand_ele.tagName.toLowerCase() === 'button' || grand_ele.tagName.toLowerCase() === 'a')){
+                    }else if(grand_ele && (grand_ele_tagName === 'button' || grand_ele_tagName === 'a')){
                         targetHandle(grand_ele,index);
                     }
+
 
         　　　　　　  if(target.children){
                         func(target.children,index+1);
