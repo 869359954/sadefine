@@ -35,7 +35,9 @@
             },
             is_track_single_page:true,
             app_js_bridge:{
-                white_list:['https://newsdktest.datasink.sensorsdata.cn/sa?project=chuqiangsheng&token=5a394d2405c147ca'],
+                white_list:[
+                'https://newsdktest.datasink.sensorsdata.cn/sa?project=chuqiangsheng&token=5a394d2405c147ca',
+                'http://10.120.51.215:8106/sa?project=default&token=schemaLimited-0AUNwDG0'],
             }
             });
             
