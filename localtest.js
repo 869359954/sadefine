@@ -125,8 +125,97 @@ if(start){
         sensors.quick('autoTrack');
 }
 
+var num = 30;
+function drawDefine(data){
+    if(window.ls869 == true){
+        var tdata = JSON.parse(data);
+        if(num > 0){
+                    console.log('开始渲染');
+                    setTimeout(() => {
+                        getEle(tdata.data);
+                        num --;
+                    }, 500);
+        }
+    }else{
+        return false;
+    }
+   
+}
+var webkit = {
+    messageHandlers :{
+        sensorsdataNativeTracker : {
+            postMessage : function(data){
+                console.log('ios 成功接收数据');
+                drawDefine(data);
+            }
+        }
+    }
+};
 
+var SensorsData_iOS_JS_Bridge = {
+    sensorsdata_app_server_url: 'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
+};
+var SensorsData_App_Visual_Bridge = {
+    sensorsdata_visualized_mode:true,
 
+};
+
+// var SensorsData_APP_JS_Bridge = {
+//     sensorsdata_track : function(data){
+//         // console.log('android APP_JS_Bridge 接收数据',data);
+//     }
+    
+// };
+// var SensorsData_APP_New_H5_Bridge = {
+//     sensorsdata_get_server_url :function(){
+//         return 'http://test-syg.datasink.sensorsdata.cn/sa?project=liangshuang&token=27f1e21b78daf376';
+
+//     },
+//     sensorsdata_track : function(data){
+//         // console.log('android APP_New_H5_Bridge 接收数据',data);
+//     }
+// };
+// var num = 3;
+// var SensorsData_App_Visual_Bridge ={
+//     sensorsdata_visualized_mode : function(){
+//         return true;
+//     },
+//     sensorsdata_hover_web_nodes:function(data){
+//     //    console.log('Android 圈选数据',data);
+//        var tdata = JSON.parse(data);
+//        if(num > 0){
+//                 console.log('开始渲染');
+//                 setTimeout(() => {
+//                     getEle(tdata.data);
+//                     num --;
+//                 }, 500);
+                
+//         }
+//     },
+//     sensorsdata_visualized_alert_info:function(data){
+//         console.log(data);
+//     }
+// };
+
+function getEle(resultarr){
+    for(var i=0;i<resultarr.length;i++){
+        var odiv = document.createElement('div');
+        odiv.id = 'test'+i;
+        odiv.style.margin = '0';
+        odiv.style.border = '0.5px solid red';
+        odiv.style.zIndex = 99999999;
+        odiv.style.position = 'absolute';
+        odiv.style.top = resultarr[i].top + resultarr[i].scrollY + 'px';
+        odiv.style.left = resultarr[i].left + resultarr[i].scrollX + 'px';
+        odiv.style.width = resultarr[i].width + 'px';
+        odiv.style.height = resultarr[i].height + 'px';
+        if(!resultarr[i].visibility){
+            odiv.style.visibility='hidden';
+        }
+        
+        document.getElementsByTagName('body')[0].appendChild(odiv);
+    }
+}
  
             
             

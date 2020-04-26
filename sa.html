@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>sa</title>
+    <style>
+      input[type=button] {
+        cursor: pointer;
+      }
+      .currentMode {
+        background-color: gray;
+      }
+      iframe {
+        margin-top: 10px;
+        width: 100%;
+        min-height: 500px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <input id="viewModeBtn" type="button" value="浏览模式" class="currentMode" />
+      <input id="trackModeBtn" type="button" value="定义模式" />
+      <input type="text" name="url" value="http://mysajs.com/demo/viso/" size="100" />
+      <input id="confirmBtn" type="button" value="Go" />
+    </div>
+    <iframe id="mainIframe" src="blank.html"></iframe>
+    <script src="http://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+$(function() {
+  var currentMode = 'view';
+  var iframe = window.frames[0];
+  function callDefine() {
+    iframe.postMessage({source:'sa-fe', type: 'v-define-mode' , data:{eventList:[
+              {
+                $element_selector: "#header > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(1) > a:nth-of-type(1)",
+                eventID: 'event123',
+              },
+              {
+                $element_selector: '#header > div:nth-of-type(1) > div:nth-of-type(1) > div:nth-of-type(2) > nav:nth-of-type(1) > ul:nth-of-type(1) > li:nth-of-type(4) > ul:nth-of-type(1) > li:nth-of-type(2) > a:nth-of-type(1)',
+                eventID: 'event456',
+              }
+            ]}
+          }, '*');
+  }
+  window.addEventListener('message', function(e) {
+    //debugger
+    var data = e.data;
+    if (data.source !== 'sa-web-sdk') return ;
+    if (data.type === 'v-ready-state') {
+      debugger;
+      if (currentMode === 'view') {
+        iframe.postMessage({source:'sa-fe', type: 'v-view-mode' }, '*');
+      } else if (currentMode === 'vtrack') {
+        setTimeout(function() {
+          callDefine();
+        }, 1000);
+      }
+    } else if (data.type === 'v-sasdk-loaded') {
+      iframe.postMessage({source:'sa-fe', type: 'v-vtrack-required' , data: {} }, '*');
+    }
+  });
+  $('#viewModeBtn').on('click', function(e) {
+    $('#trackModeBtn').removeClass('currentMode');
+    $(this).addClass('currentMode');
+    currentMode = 'view';
+    iframe.postMessage({source:'sa-fe', type: 'v-view-mode' }, '*');
+    return false;
+  });
+  $('#trackModeBtn').on('click', function(e) {
+    $('#viewModeBtn').removeClass('currentMode');
+    $(this).addClass('currentMode');
+    currentMode = 'vtrack';
+    callDefine();
+    return false;
+  });
+  $('#mainIframe').on('load', function() {
+    debugger;
+    window.frames[0].postMessage('hello', '*');
+  });
+  $('#confirmBtn').on('click', function(e) {
+    $('#mainIframe').attr('src', $('input[name=url]').val());
+    return false;
+  });
+});
+    </script>
+  </body>
+</html>

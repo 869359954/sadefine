@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+  <title>Demo</title>
+
+
+<script>
+  (function(para) {
+    var p = para.sdk_url, n = para.name, w = window, d = document, s = 'script',x = null,y = null;
+    if(typeof(w['sensorsDataAnalytic201505']) !== 'undefined') {
+        return false;
+    }
+    w['sensorsDataAnalytic201505'] = n;
+    w[n] = w[n] || function(a) {return function() {(w[n]._q = w[n]._q || []).push([a, arguments]);}};
+    var ifs = ['track','quick','register','registerPage','registerOnce','trackSignup', 'trackAbtest', 'setProfile','setOnceProfile','appendProfile', 'incrementProfile', 'deleteProfile', 'unsetProfile', 'identify','login','logout','trackLink','clearAllRegister'];
+    for (var i = 0; i < ifs.length; i++) {
+      w[n][ifs[i]] = w[n].call(null, ifs[i]);
+    }
+    if (!w[n]._t) {
+      x = d.createElement(s), y = d.getElementsByTagName(s)[0];
+      x.async = 1;
+      x.src = p;
+      w[n].para = para;
+      y.parentNode.insertBefore(x, y);
+    }
+  })({
+      is_track_single_page: false,
+      //send_type: 'ajax',
+      //use_app_track: true,
+        sdk_url: 'https://kang335.gitee.io/satest/sensorsdata.full.js?r=' + Math.random(),
+        name: 'sensors',
+        server_url: 'http://liuxing2.debugbox.sensorsdata.cn/sa?project=default',
+
+        //heatmap_url神策分析中点击分析及触达分析功能代码，代码生成工具会自动生成。如果神策代码中 `sensorsdata.min.js` 版本是 1.9.1 及以上版本，这个参数必须配置，低于此版本不需要配置
+        vtrack_url: 'https://kang335.gitee.io/satest/vtrack.full.js?r=' + Math.random(),
+        heatmap: {
+        }
+      });
+      sensors.quick('autoTrack');
+ 
+</script>
+
+ 
+  <script type="text/javascript">
+  var Event = (function(){
+    var list = {},
+          listen,
+          trigger,
+          remove;
+          listen = function(key,fn){
+            if(!list[key]) {
+                list[key] = [];
+            }
+            list[key].push(fn);
+        };
+        trigger = function(){
+            var key = Array.prototype.shift.call(arguments),
+                 fns = list[key];
+            if(!fns || fns.length === 0) {
+                return false;
+            }
+            for(var i = 0, fn; fn = fns[i++];) {
+                fn.apply(this,arguments);
+            }
+        };
+        remove = function(key,fn){
+            var fns = list[key];
+            if(!fns) {
+                return false;
+            }
+            if(!fn) {
+                fns && (fns.length = 0);
+            }else {
+                for(var i = fns.length - 1; i >= 0; i--){
+                    var _fn = fns[i];
+                    if(_fn === fn) {
+                        fns.splice(i,1);
+                    }
+                }
+            }
+        };
+        return {
+            listen: listen,
+            trigger: trigger,
+            remove: remove
+        }
+})();
+</script>
+
+</head>
+<body>
+    <button id="count">点我</button>
+    <div id="showcount"></div>
+
+
+    <script>
+      var a = (function(){
+          var count = 0;
+          var button = document.getElementById("count");
+          button.onclick = function(){
+              Event.trigger("add",count++);
+          }
+      })();
+
+      var b = (function(){
+          var div = document.getElementById("showcount");
+          Event.listen('add',function(count){
+              div.innerHTML = count;
+          });
+      })();
+    </script>
+
+
+     
+
+  
+<p><a href="http://beian.miit.gov.cn" target="_blank">蜀ICP备18038377号-2</a></p >
+  
+
+  <a href="" class="mnav" name="神策新闻" id="news">sun</a>
+
+  <div id="app">
+    {{ message }}
+  </div>
+
+  <div id="app-2">
+    <span v-bind:title="message">
+      鼠标悬停几秒钟查看此处动态绑定的提示信息！
+    </span>
+  </div>
+
+  <div id="app-3">
+    <p v-if="seen">现在你看到我了</p>
+  </div>
+  
+  <div id="app-4">
+   <ol>
+      <li v-for="todo in todos">
+       {{ todo.text }}
+      </li>
+   </ol>
+  </div>
+
+  <div id="app-5">
+    <p>{{ message }}</p>
+    <button v-on:click="reverseMessage">反转消息</button>
+  </div>
+
+  <div id="app-6">
+    <p> {{ message }} </p>
+    <input v-model = "message"/>
+  </div>
+
+
+</body>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script>
+    var app = new Vue ({
+      el : '#app',
+      data : {
+        message : 'Hello Vue!'
+      }
+    })
+
+    var app2 = new Vue({
+      el: '#app-2',
+      data: {
+        message: '页面加载于 ' + new Date().toLocaleString()
+      }
+    })
+
+    var app3 = new Vue({
+      el: '#app-3',
+      data: {
+        seen: true
+      }
+      
+    })
+
+    var app4 = new Vue({
+      el: '#app-4',
+      data: {
+        todos: [
+          { text: '学习 JavaScript' },
+          { text: '学习 Vue' },
+          { text: '整个牛项目' }
+        ]
+      }
+    })
+
+    var app5 = new Vue({
+      el: '#app-5',
+      data: {
+        message: 'Hello Vue.js!'
+      },
+      methods: {
+        reverseMessage: function () {
+          this.message = this.message.split('').reverse().join('')
+        }
+      }
+    })
+
+    var app6 = new Vue({
+      el : '#app-6',
+      data:{
+        message : 'Hello Vue'
+      }
+    })
+  </script>
+</html>
