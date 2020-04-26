@@ -45,10 +45,10 @@ if(start){
             if(server_input && server_input.value){
                 config.app_js_bridge.white_list.push(server_input.value);
             }
-            serverbtn.onclick = function(){
-                config.app_js_bridge.white_list = [];
-                config.server_url= 'http://ls.com/';
-            }
+            // serverbtn.onclick = function(){
+            //     config.app_js_bridge.white_list = [];
+            //     config.server_url= 'http://ls.com/';
+            // }
             (function(para) {
                 var p = para.sdk_url, n = para.name, w = window, d = document, s = 'script',x = null,y = null;
                 if(typeof(w['sensorsDataAnalytic201505']) !== 'undefined') {
