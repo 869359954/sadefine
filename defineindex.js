@@ -42,13 +42,16 @@ if(start){
                     };
                 }
             }
+            if(select_server && select_server.value){
+                if(select_server.value == 'no'){
+                    config.server_url='http://test.com';
+                    config.app_js_bridge.white_list=[];
+                }
+            }
             if(server_input && server_input.value){
                 config.app_js_bridge.white_list.push(server_input.value);
             }
-            // serverbtn.onclick = function(){
-            //     config.app_js_bridge.white_list = [];
-            //     config.server_url= 'http://ls.com/';
-            // }
+            
             (function(para) {
                 var p = para.sdk_url, n = para.name, w = window, d = document, s = 'script',x = null,y = null;
                 if(typeof(w['sensorsDataAnalytic201505']) !== 'undefined') {
