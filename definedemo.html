@@ -164,11 +164,19 @@
 <body>
     <div class="wrapper">
         <div class="title">config Test Module</div>
-        <div style="font-size: 13px; margin-bottom: 15px;">
-            可以通过以下几个选项对 H5 SDK 进行配置，完成后请
-             <span style="color: red;">点击“注入 JS SDK”按钮</span>  
+        <div style="font-size: 13px; margin-bottom: 15px; text-align: left;padding:0 10px;">
+            <div>web 可视化开启步骤(用于开发调试)：</div>
+            <div>
+                1、通过以下几个选项对 H5 SDK 进行配置
+            </div>
+            <div>
+                2、配置好后<span style="color: red;">点击“注入 JS SDK”按钮</span>  
+
+            </div>
+            <div>
+                3、可以跳过配置直接点击“注入 JS SDK”，使用默认配置，默认配置可成功开启可视化
+            </div>
         </div>
-        <div style="font-size: 13px;margin-bottom: 15px;">可以跳过配置直接点击“注入 JS SDK”，使用默认配置，默认配置可成功开启可视化</div>
         <div class="config">
             <div>
                 <div class="sel">
@@ -187,6 +195,10 @@
                         <option value="no">否</option>
                     </select>
                 </div>
+            </div>
+            <div>
+                <span>3. 重置 H5 server_url 配置,校验 server_url 不一致的情况</span>
+                <button id="serverbtn" style="border: 1px solid gray; border-radius: 10px;">重置</button>
             </div>
             <div>
                 <span>3.添加 App server_url：</span>
