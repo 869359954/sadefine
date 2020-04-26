@@ -45,7 +45,9 @@ if(start){
             if(select_server && select_server.value){
                 if(select_server.value == 'no'){
                     config.server_url='http://test.com';
-                    config.app_js_bridge.white_list=[];
+                    if(select_bridge.value == 'yes'){
+                        config.app_js_bridge.white_list=[];
+                    }
                 }
             }
             if(server_input && server_input.value){
