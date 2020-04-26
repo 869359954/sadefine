@@ -51,7 +51,9 @@ if(start){
                 }
             }
             if(server_input && server_input.value){
-                config.app_js_bridge.white_list.push(server_input.value);
+                if(select_bridge.value == 'yes'){
+                    config.app_js_bridge.white_list.push(server_input.value);
+                }
             }
             
             (function(para) {
