@@ -47,12 +47,16 @@ if(start){
                     config.server_url='http://test.com';
                     if(select_bridge.value == 'yes'){
                         config.app_js_bridge.white_list=[];
+                    }else{
+                        alert('请先配置 2.开启打通');
                     }
                 }
             }
             if(server_input && server_input.value){
                 if(select_bridge.value == 'yes'){
                     config.app_js_bridge.white_list.push(server_input.value);
+                }else{
+                    alert('请先配置 2.开启打通');
                 }
             }
             
