@@ -157,7 +157,6 @@
         //获取可视化 H5 data
         getDefineInfo : function(){
             var tags = defineStore.getDefineTags(document.children);
-            console.log(tags);
             var tagDataArr = defineStore.getAllTagsInfo(tags);
             var dataObj = {
                 callType : 'visualized_track',
