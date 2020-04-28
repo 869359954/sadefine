@@ -24,18 +24,11 @@
                     var target = obj[i];
                     var tags = ['input','a','button','textarea'];
                     var tagname = target.tagName.toLowerCase();
-                    var parent_ele = target.parentNode;
-                    var parent_ele_tagName = parent_ele?parent_ele.tagName ? parent_ele.tagName.toLowerCase() : null:null;
-                    var grand_ele = parent_ele.parentNode;
-                    var grand_ele_tagName = grand_ele ? grand_ele.tagName ? grand_ele.tagName.toLowerCase() : null:null;
                     
                     if(tags.indexOf(tagname) > -1){
                         targetHandle(target,index);
-                    }else if (parent_ele && (parent_ele_tagName === 'button' || parent_ele_tagName === 'a')) {
-                        targetHandle(parent_ele,index);
-                    }else if(grand_ele && (grand_ele_tagName === 'button' || grand_ele_tagName === 'a')){
-                        targetHandle(grand_ele,index);
                     }
+                
 
 
         　　　　　　  if(target.children){
@@ -164,13 +157,14 @@
         //获取可视化 H5 data
         getDefineInfo : function(){
             var tags = defineStore.getDefineTags(document.children);
+            console.log(tags);
             var tagDataArr = defineStore.getAllTagsInfo(tags);
             var dataObj = {
                 callType : 'visualized_track',
                 data : tagDataArr
             };
             console.log(tagDataArr);
-            this.postData(dataObj); 
+            defineStore.postData(dataObj); 
         },
         //发送数据给 App 
         postData:function(data){
@@ -229,8 +223,8 @@
         },
         init : function(){
             var that = this;
-            this.postPageInfo();
             window.sa_jssdk_app_define_mode = function(sd){
+                that.postPageInfo();
                 that.sdStore = sd;
                 var loaded = false;
                 window.addEventListener('load',function(){
