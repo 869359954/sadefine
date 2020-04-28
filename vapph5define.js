@@ -1,6 +1,8 @@
 
 
 ;(function(){
+    var historyPushState = window.history.pushState;
+    var historyReplaceState = window.history.replaceState;
     var defineStore = {
         sdStore : null,
         getDefineTags : function (child){
@@ -117,7 +119,7 @@
             testTag(el);
             return elementsArr;
         },
-        getInfo : function(el){
+        getElementInfo : function(el){
             var po = el.getBoundingClientRect();
             var tagname = el.tagName;
             var obj = {
@@ -141,10 +143,10 @@
             return obj;
         },
         //获取圈选元素信息返回按序排列好的
-        getTagsInfo : function(tags){
+        getAllTagsInfo : function(tags){
             var arr = [];
             for(var i=0;i<tags.length;i++){
-                arr.push(this.getInfo(tags[i]));
+                arr.push(this.getElementInfo(tags[i]));
             }
             return this.sortIndex(arr);
         },
@@ -159,21 +161,26 @@
             }
             return arr;
         },
-        //获取元素信息并发送给 app
+        //获取可视化 H5 data
         getDefineInfo : function(){
             var tags = defineStore.getDefineTags(document.children);
-            var tagDataArr = defineStore.getTagsInfo(tags);
+            var tagDataArr = defineStore.getAllTagsInfo(tags);
             var dataObj = {
                 callType : 'visualized_track',
                 data : tagDataArr
             };
             console.log(tagDataArr);
+            this.postData(dataObj); 
+        },
+        //发送数据给 App 
+        postData:function(data){
             if(typeof window.SensorsData_App_Visual_Bridge === 'object' && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker){
-                window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify(dataObj));
+                window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify(data));
             }else if(typeof window.SensorsData_App_Visual_Bridge === 'object' && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode() && window.SensorsData_App_Visual_Bridge.sensorsdata_hover_web_nodes){
-                window.SensorsData_App_Visual_Bridge.sensorsdata_hover_web_nodes(JSON.stringify(dataObj));
+                window.SensorsData_App_Visual_Bridge.sensorsdata_hover_web_nodes(JSON.stringify(data));
             } 
         },
+        //添加可视化监听器
         addDefineListener : function(callback){
             var that = this;
             function observe (el, options, callback) {
@@ -195,10 +202,35 @@
             that.sdStore._.addEvent(window,'resize',changeFunc);
             that.sdStore._.addEvent(window,'load',changeFunc);
         },
+        //发送页面信息
+        postPageInfo:function(){
+            var that = this;
+            function getPageInfo(){
+                var dataObj = {
+                    callType:"page_info",
+                    data:{
+                        "$title": document.title,  
+                        "$url": location.href, 
+                    }
+                };
+                that.postData(dataObj);
+            }
+            getPageInfo();
+            var hashEvent = ('pushState' in window.history ? 'popstate' : 'hashchange');
+            history.pushState = function() {
+                historyPushState.apply(window.history, arguments);
+                getPageInfo();
+            };
+            history.replaceState = function() {
+                historyReplaceState.apply(window.history, arguments);
+                getPageInfo();
+            };
+            window.addEventListener(hashEvent,getPageInfo);
+        },
         init : function(){
             var that = this;
+            this.postPageInfo();
             window.sa_jssdk_app_define_mode = function(sd){
-                
                 that.sdStore = sd;
                 var loaded = false;
                 window.addEventListener('load',function(){
@@ -217,7 +249,5 @@
     };
 
     defineStore.init();
-    
-
 
 })();
