@@ -4332,6 +4332,8 @@
           if(_.iOS_UA_bridge()){
             iosUAbridge = true;
           }
+          console.log(iosUAbridge,'iosUAbridge');
+          console.log(appBridge,'appBridge ');
           
         }
         function getAndPostDebugInfo(){
@@ -4348,6 +4350,7 @@
               //H5 没有开启全埋点
               arr.push(sd.debug.defineMode('3'));
             }
+            console.log('sd.para.app_js_bridge.defineModeDebugInfo',sd.para.app_js_bridge.defineModeDebugInfo);
             if(_.isObject(sd.para.app_js_bridge) && sd.para.app_js_bridge.defineModeDebugInfo == '4'){
               //校验失败
               arr.push(sd.debug.defineMode('4'));
@@ -4384,7 +4387,7 @@
               getAndPostDebugInfo();
             }
           }else{
-            //未开启全埋点弹框
+            //打通失败弹框debug信息传给 App
             getAndPostDebugInfo();
           }
     
