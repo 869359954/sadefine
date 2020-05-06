@@ -2120,13 +2120,13 @@
         white_list: [],
         H5verify: false,
       };
-      if (sd.para.use_app_track === true || sd.para.app_js_bridge === true) {
+      if (typeof sd.para.app_js_bridge === 'object') {
+        sd.para.app_js_bridge = _.extend({}, app_js_bridge_default, sd.para.app_js_bridge);
+      }else if (sd.para.use_app_track === true || sd.para.app_js_bridge === true) {
         if (sd.para.use_app_track_is_send === false) {
           sd.para.app_js_bridge_default.is_send = false;
         }
         sd.para.app_js_bridge = _.extend({}, app_js_bridge_default);
-      } else if (typeof sd.para.app_js_bridge === 'object') {
-        sd.para.app_js_bridge = _.extend({}, app_js_bridge_default, sd.para.app_js_bridge);
       } else if (sd.para.use_app_track === 'only' || sd.para.use_app_track === 'mui') {
         sd.para.app_js_bridge = sd.para.use_app_track;
       }
@@ -2180,8 +2180,8 @@
               }
             }
 
-          } else {}
-        } else {}
+          } 
+        } 
       }
       initAppH5Status();
       var i;
