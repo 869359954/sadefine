@@ -132,6 +132,7 @@ if(start){
         is_track_single_page:true,
         app_js_bridge:{
             white_list:[
+            'http://liuxing2.debugbox.sensorsdata.cn/sa?project=default',
             'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
             'http://10.120.81.212:8106/sa?project=default',
             'http://liuxing.debugbox.sensorsdata.cn/sa?project=default',
