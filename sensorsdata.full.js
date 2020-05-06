@@ -1387,7 +1387,7 @@
             if (hostname && hostname === match[0] && project && project === match[1]) {
                return true;
             } else {
-               sd.para.app_js_bridge.defineModeDebugInfo == '4';
+               sd.para.app_js_bridge.defineModeDebugInfo ='4';
                console.log('debuginfo',sd.para.app_js_bridge.defineModeDebugInfo);
                return false;
             }
