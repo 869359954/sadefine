@@ -4319,19 +4319,23 @@
 
       },
       initDefineMode : function(){
+        var appBridge = false;
+        var iosUAbridge = false;
+        if((window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)){
+          appBridge = true;
+        };
+        if((_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track)){
+          appBridge = true;
+        }
+        if((/sensors-verify/.test(navigator.userAgent) || /sa-sdk-ios/.test(navigator.userAgent)) && !window.MSStream){
+          appBridge = true;
+          if(_.iOS_UA_bridge()){
+            iosUAbridge = true;
+          }
+          
+        }
         function getAndPostDebugInfo(){
             var arr = [];
-            var appBridge = false;
-            if((window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)){
-              appBridge = true;
-            };
-            if((_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track)){
-              appBridge = true;
-            }
-            if((/sensors-verify/.test(navigator.userAgent) || /sa-sdk-ios/.test(navigator.userAgent)) && !window.MSStream){
-              appBridge = true;
-              _.iOS_UA_bridge();
-            }
             if(!appBridge){
               //App 没有开启打通
               arr.push(sd.debug.defineMode('1'));
@@ -4362,7 +4366,7 @@
         }
         if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
           if(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default'){
-            if(_.isObject(sd.para.app_js_bridge) && (sd.para.app_js_bridge.H5verify || _.iOS_UA_bridge())){
+            if(_.isObject(sd.para.app_js_bridge) && (sd.para.app_js_bridge.H5verify || iosUAbridge)){
               _.loadScript({
                 success:function(){
                     setTimeout(function(){
