@@ -1370,6 +1370,33 @@
         g.send(para.data || null);
 
       };
+      
+      _.iOS_UA_bridge = function(){
+        if (/sensors-verify/.test(navigator.userAgent)) {
+          var match = navigator.userAgent.match(/sensors-verify\/([^\s]+)/);
+          if (match && match[0] && (typeof match[1] === 'string') && (match[1].split('?').length === 2)) {
+            match = match[1].split('?');
+            var hostname = null;
+            var project = null;
+            try {
+              hostname = _.URL(sd.para.server_url).hostname;
+              project = _.URL(sd.para.server_url).searchParams.get('project') || 'default';
+            } catch (e) {
+              sd.log(e);
+            };
+            if (hostname && hostname === match[0] && project && project === match[1]) {
+               return true;
+            } else {
+               sd.para.app_js_bridge.defineModeDebugInfo == '4';
+               return false;
+            }
+          }else{
+            return false;
+          }
+        } else {
+          return true;
+        }
+      }
 
       _.loadScript = function(para) {
         para = _.extend({
@@ -3387,39 +3414,7 @@
           }
         } else if ((/sensors-verify/.test(navigator.userAgent) || /sa-sdk-ios/.test(navigator.userAgent)) && !window.MSStream) {
           var iframe = null;
-          if (/sensors-verify/.test(navigator.userAgent)) {
-            var match = navigator.userAgent.match(/sensors-verify\/([^\s]+)/);
-            if (match && match[0] && (typeof match[1] === 'string') && (match[1].split('?').length === 2)) {
-              match = match[1].split('?');
-              var hostname = null;
-              var project = null;
-              try {
-                hostname = _.URL(sd.para.server_url).hostname;
-                project = _.URL(sd.para.server_url).searchParams.get('project') || 'default';
-              } catch (e) {
-                sd.log(e);
-              };
-              if (hostname && hostname === match[0] && project && project === match[1]) {
-                iframe = document.createElement('iframe');
-                iframe.setAttribute('src', 'sensorsanalytics://trackEvent?event=' + encodeURIComponent(JSON.stringify(_.extend({
-                  server_url: sd.para.server_url
-                }, originData))));
-                document.documentElement.appendChild(iframe);
-                iframe.parentNode.removeChild(iframe);
-                iframe = null;
-                (typeof callback === 'function') && callback();
-              } else {
-                if (sd.para.app_js_bridge.is_send) {
-                  sd.debug.apph5({
-                    data: originData,
-                    step: '3.2',
-                    output: 'all'
-                  });
-                  this.prepareServerUrl();
-                }
-              }
-            }
-          } else {
+          if(_.iOS_UA_bridge()){
             iframe = document.createElement('iframe');
             iframe.setAttribute('src', 'sensorsanalytics://trackEvent?event=' + encodeURIComponent(JSON.stringify(_.extend({
               server_url: sd.para.server_url
@@ -3428,6 +3423,15 @@
             iframe.parentNode.removeChild(iframe);
             iframe = null;
             (typeof callback === 'function') && callback();
+          }else{
+            if (sd.para.app_js_bridge.is_send) {
+              sd.debug.apph5({
+                data: originData,
+                step: '3.2',
+                output: 'all'
+              });
+              this.prepareServerUrl();
+            }
           }
         } else {
           if (_.isObject(sd.para.app_js_bridge) && sd.para.app_js_bridge.is_send === true) {
@@ -4317,17 +4321,31 @@
       initDefineMode : function(){
         function getAndPostDebugInfo(){
             var arr = [];
-            if(!((window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)
-            ||(_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track))){
+            var appBridge = false;
+            if((window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)){
+              appBridge = true;
+            };
+            if((_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track)){
+              appBridge = true;
+            }
+            if((/sensors-verify/.test(navigator.userAgent) || /sa-sdk-ios/.test(navigator.userAgent)) && !window.MSStream){
+              appBridge = true;
+              _.iOS_UA_bridge();
+            }
+            if(!appBridge){
+              //App 没有开启打通
               arr.push(sd.debug.defineMode('1'));
             }
             if(!(_.isObject(sd.para.app_js_bridge))){
+              //H5 没有开启打通
               arr.push(sd.debug.defineMode('2'));
             }
             if(!(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default')){
+              //H5 没有开启全埋点
               arr.push(sd.debug.defineMode('3'));
             }
             if(_.isObject(sd.para.app_js_bridge) && sd.para.app_js_bridge.defineModeDebugInfo == '4'){
+              //校验失败
               arr.push(sd.debug.defineMode('4'));
             }
             var data = {
@@ -4344,7 +4362,7 @@
         }
         if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
           if(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default'){
-            if(_.isObject(sd.para.app_js_bridge) && sd.para.app_js_bridge.H5verify){
+            if(_.isObject(sd.para.app_js_bridge) && (sd.para.app_js_bridge.H5verify || _.iOS_UA_bridge())){
               _.loadScript({
                 success:function(){
                     setTimeout(function(){
