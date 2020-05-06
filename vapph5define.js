@@ -41,7 +41,9 @@
 
         },
         getVisibility : function(el){
-            return (_isVisible(el));    
+             
+            var po = el.getBoundingClientRect(); 
+            return (_isVisible(el)); 
             function _isVisible(el) {
                 var p = el.parentNode;
                 
@@ -55,10 +57,11 @@
                 ) {
                     return false;
                 }
-                var po = el.getBoundingClientRect();
+               
                 if ( p ) {
                     if ( ('hidden' === _getStyle(p, 'overflow') || 'scroll' === _getStyle(p, 'overflow')) ) {
                         var parentPo = p.getBoundingClientRect();
+                        // console.log(el,p,po,parentPo);
                         if (
                             (po.bottom <= parentPo.top)||
                             (po.top >= parentPo.bottom)||
@@ -116,6 +119,7 @@
             var po = el.getBoundingClientRect();
             var tagname = el.tagName;
             var obj = {
+                // el:el,
                 id : el.sensorsDefineStore.id,
                 $element_content : this.sdStore._.getElementContent(el,tagname),
                 $element_selector : this.sdStore.heatmap.getDomSelector(el),

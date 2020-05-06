@@ -1,6 +1,8 @@
 
 var start = document.getElementById('startdefine');
+console.log(33);
 if(start){
+    console.log('66');
     var flag = true;
     console.log('请点击开始可视化');
     start.onclick = function(){
@@ -78,7 +80,7 @@ if(start){
 
 
 }else{
-    
+    console.log(123);
     (function(para) {
         var p = para.sdk_url, n = para.name, w = window, d = document, s = 'script',x = null,y = null;
         if(typeof(w['sensorsDataAnalytic201505']) !== 'undefined') {
@@ -126,6 +128,7 @@ if(start){
 }
 
 var num = 30;
+window.ls869 = true;
 function drawDefine(data){
     if(window.ls869 == true){
         var tdata = JSON.parse(data);
