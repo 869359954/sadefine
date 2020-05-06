@@ -123,7 +123,7 @@ if(start){
         source_type:{
             utm:['ls']
         },
-        server_url:'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
+        server_url:'http://liuxing.debugbox.sensorsdata.cn/sa?project=default',
         // server_url: 'http://liuxing2.debugbox.sensorsdata.cn/sa?project=chuqiangsheng',
         heatmap:{
             scroll_notice_map:'not_collect',
@@ -132,6 +132,7 @@ if(start){
         is_track_single_page:true,
         app_js_bridge:{
             white_list:[
+            'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
             'http://10.120.81.212:8106/sa?project=default',
             'http://liuxing.debugbox.sensorsdata.cn/sa?project=default',
             'https://newsdktest.datasink.sensorsdata.cn/sa?project=chuqiangsheng&token=5a394d2405c147ca',
