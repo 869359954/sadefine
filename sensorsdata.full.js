@@ -4459,7 +4459,7 @@
           //处理 webview H5 页面进入可视化没有重新加载的特殊情况，App 进入可视化后调用
           window.sensorsdata_app_call_js = function(type){
             console.log(type);
-            if(type && type == 'viusalized'){
+            if(type && type == 'visualized'){
               console.log('window.sensorsdata_app_call_js');
               console.log(me);
               me.initDefineMode();
