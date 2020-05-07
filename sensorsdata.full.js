@@ -1388,7 +1388,6 @@
                return true;
             } else {
                sd.para.app_js_bridge.defineModeDebugInfo = '4';
-               console.log('dd',sd.para.app_js_bridge.defineModeDebugInfo);
                return false;
             }
           }else{
@@ -2195,7 +2194,7 @@
             if (checkProjectAndHost(window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)) {
               sd.para.app_js_bridge.H5verify = true;
             }else{
-              sd.para.app_js_bridge.defineModeDebugInfo = '4'
+              sd.para.app_js_bridge.defineModeDebugInfo = '4';
             }
 
           } else if (_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track) {
@@ -4321,7 +4320,7 @@
       },
       initDefineMode : function(){
         var appBridge = false;
-        var iosUAbridge = false;
+        var iosUAVerify = false;
         if((window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)){
           appBridge = true;
         };
@@ -4331,10 +4330,8 @@
         if((/sensors-verify/.test(navigator.userAgent) || /sa-sdk-ios/.test(navigator.userAgent)) && !window.MSStream){
           appBridge = true;
           if(_.iOS_UA_bridge()){
-            iosUAbridge = true;
+            iosUAVerify = true;
           }
-          console.log(iosUAbridge,'iosUAbridge');
-          console.log(appBridge,'appBridge ');
           
         }
         function getAndPostDebugInfo(){
@@ -4351,7 +4348,6 @@
               //H5 没有开启全埋点
               arr.push(sd.debug.defineMode('3'));
             }
-            console.log('sd.para.app_js_bridge.defineModeDebugInfo',sd.para.app_js_bridge.defineModeDebugInfo);
             if(_.isObject(sd.para.app_js_bridge) && sd.para.app_js_bridge.defineModeDebugInfo == '4'){
               //校验失败
               arr.push(sd.debug.defineMode('4'));
@@ -4370,7 +4366,7 @@
         }
         if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
           if(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default'){
-            if(_.isObject(sd.para.app_js_bridge) && (sd.para.app_js_bridge.H5verify || iosUAbridge)){
+            if(_.isObject(sd.para.app_js_bridge) && (sd.para.app_js_bridge.H5verify || iosUAVerify)){
               _.loadScript({
                 success:function(){
                     setTimeout(function(){
@@ -4455,6 +4451,11 @@
           heatmap.setNotice();
           isReady(sessionStorage.getItem('sensors_heatmap_id'), sessionStorage.getItem('sensors_heatmap_type'), location.href);
         } else {
+          window.sensorsdata_app_call_js = function(type){
+            if(type && type == 'viusalized'){
+              me.initDefineMode();
+            }
+          }
           me.initDefineMode();
           todo();
           if (_.isObject(sd.para.heatmap)) {
