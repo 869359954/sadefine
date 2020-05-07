@@ -4365,7 +4365,6 @@
             }
     
         }
-        console.log(window.SensorsData_App_Visual_Bridge, window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode,window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode());
         if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
           console.log('1')
           if(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default'){
