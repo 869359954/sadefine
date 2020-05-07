@@ -4462,6 +4462,7 @@
             console.log(type);
             if(type && type == 'viusalized'){
               console.log('window.sensorsdata_app_call_js');
+              console.log(me);
               me.initDefineMode();
             }
           }
