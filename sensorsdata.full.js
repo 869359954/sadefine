@@ -4453,6 +4453,7 @@
         } else {
           window.sensorsdata_app_call_js = function(type){
             if(type && type == 'viusalized'){
+              console.log('window.sensorsdata_app_call_js');
               me.initDefineMode();
             }
           }
