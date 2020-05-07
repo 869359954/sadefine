@@ -4364,11 +4364,15 @@
             }
     
         }
+        console.log(window.SensorsData_App_Visual_Bridge, window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode,window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode());
         if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
+          console.log('1')
           if(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default'){
+            console.log('2')
             if(_.isObject(sd.para.app_js_bridge) && (sd.para.app_js_bridge.H5verify || iosUAVerify)){
               _.loadScript({
                 success:function(){
+                  console.log('3')
                     setTimeout(function(){
                       if(typeof sa_jssdk_app_define_mode !== 'undefined'){
                         sa_jssdk_app_define_mode(sd);
@@ -4379,6 +4383,7 @@
                 type:'js',
                 url: './vapph5define.js'
               });
+            
             }else{
               //打通失败弹框debug信息传给App 
               getAndPostDebugInfo();
