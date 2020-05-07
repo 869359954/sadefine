@@ -4319,6 +4319,7 @@
 
       },
       initDefineMode : function(){
+        console.log('initdefinemode');
         var appBridge = false;
         var iosUAVerify = false;
         if((window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)){
