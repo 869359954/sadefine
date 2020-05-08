@@ -61,7 +61,6 @@
                 if ( p ) {
                     if ( ('hidden' === _getStyle(p, 'overflow') || 'scroll' === _getStyle(p, 'overflow')) ) {
                         var parentPo = p.getBoundingClientRect();
-                        // console.log(el,p,po,parentPo);
                         if (
                             (po.bottom <= parentPo.top)||
                             (po.top >= parentPo.bottom)||
@@ -226,20 +225,18 @@
         },
         init : function(){
             var that = this;
+            var timer = null;
             window.sa_jssdk_app_define_mode = function(sd){
                 that.postPageInfo();
                 that.sdStore = sd;
-                var loaded = false;
                 window.addEventListener('load',function(){
-                    loaded = true;
+                    this.clearTimeout(timer);
                     that.getDefineInfo();//获取元素信息
                     that.addDefineListener(that.getDefineInfo);//添加监控器
                 });
-                setTimeout(function(){
-                    if(!loaded){
-                        that.getDefineInfo();
-                        that.addDefineListener(that.getDefineInfo);
-                    }
+                timer = setTimeout(function(){
+                    that.getDefineInfo();
+                    that.addDefineListener(that.getDefineInfo);
                 },1000);
             };
         }
