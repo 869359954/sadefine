@@ -6,6 +6,11 @@
     <title>sell</title>
     <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no">
     <link rel=stylesheet href="./static/css/reset.css">
+    <style>
+        /* div{
+            display: inline-block;
+        } */
+    </style>
     <link href="./static/css/app.514c6eba228075f3ce776ff26e50217b.css" rel="stylesheet">
 </head>
 
@@ -16,4 +21,32 @@
     <script type='text/javascript' src='./static/js/app.ee29d4b1f76121530271.js'></script>
 </body>
 <script src="../defineindex.js"></script>
+<script>
+    function creatA(classname){
+        var obtn = document.getElementsByClassName(classname);
+        for(var i=0;i<obtn.length;i++){
+            var parent = obtn[i].parentNode;
+            var target = obtn[i];
+            var atag = document.createElement('a');
+            atag.id = 'sensorstag';
+            if(parent && parent.removeChild){
+                parent.removeChild(obtn[i]);
+                atag.appendChild(target);
+                parent.appendChild(atag);  
+            }
+        }
+        var ibtn = document.getElementsByClassName(classname);
+        for (var i =0;i<ibtn.length;i++){
+            if(ibtn[i].parentNode.id = 'sensorstag'){
+                
+            }else{
+                ibtn[i].parentNode.removeChild(ibtn[i]);
+            }
+        }
+
+    }
+    creatA('icon-add_circle');
+    creatA('star');
+    
+</script>
 </html>
