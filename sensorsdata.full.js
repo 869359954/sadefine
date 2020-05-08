@@ -2157,7 +2157,7 @@
       } else if (sd.para.use_app_track === 'only' || sd.para.use_app_track === 'mui') {
         sd.para.app_js_bridge = sd.para.use_app_track;
       }
-
+      
       function initAppH5Status() {
         function checkProjectAndHost(appUrl) {
           function getHostNameAndProject(url) {
@@ -4319,7 +4319,6 @@
 
       },
       initDefineMode : function(){
-        console.log('initdefinemode');
         var appBridge = false;
         var iosUAVerify = false;
         if((window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)){
@@ -4366,13 +4365,10 @@
     
         }
         if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
-          console.log('1')
           if(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default'){
-            console.log('2')
             if(_.isObject(sd.para.app_js_bridge) && (sd.para.app_js_bridge.H5verify || iosUAVerify)){
               _.loadScript({
                 success:function(){
-                  console.log('3')
                     setTimeout(function(){
                       if(typeof sa_jssdk_app_define_mode !== 'undefined'){
                         sa_jssdk_app_define_mode(sd);
@@ -4381,7 +4377,7 @@
                 },
                 error:function(){},
                 type:'js',
-                url: './vapph5define.js'
+                url: 'https://869359954.github.io/sadefine/vapph5define.js'
               });
             
             }else{
@@ -4458,10 +4454,7 @@
         } else {
           //处理 webview H5 页面进入可视化没有重新加载的特殊情况，App 进入可视化后调用
           window.sensorsdata_app_call_js = function(type){
-            console.log(type);
             if(type && type == 'visualized'){
-              console.log('window.sensorsdata_app_call_js');
-              console.log(me);
               me.initDefineMode();
             }
           }
