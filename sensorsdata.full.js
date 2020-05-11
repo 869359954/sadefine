@@ -3550,11 +3550,6 @@ sendState.getSendCall = function(data, config, callback) {
   // 打通app传数据给app
   if(_.isObject(sd.para.app_js_bridge) && !sd.para.app_js_bridge.is_mui){
     //如果有新版，优先用新版
-    console.log(window.webkit, window.webkit.messageHandlers ,
-       window.webkit.messageHandlers.sensorsdataNativeTracker ,
-        window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage,
-         window.SensorsData_iOS_JS_Bridge,
-         window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)
     if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url) {
       if(sd.para.app_js_bridge.is_verify_success){
         window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify({callType:'app_h5_track', data: _.extend({server_url:sd.para.server_url}, originData)}));
