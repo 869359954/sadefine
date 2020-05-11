@@ -4633,7 +4633,7 @@ var saNewUser = {
             },
             error:function(){},
             type:'js',
-            url: './vapph5define.js'
+            url: 'https://869359954.github.io/sadefine/vapph5define.js'
           });
         }else{
           //打通失败弹框debug信息传给App 
