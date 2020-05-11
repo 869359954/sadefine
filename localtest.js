@@ -1,38 +1,4 @@
 
-function drawDefine(data){
-    if(window.ls869 == true){
-        var tdata = JSON.parse(data);
-        if(num > 0){
-                    console.log('开始渲染');
-                    setTimeout(() => {
-                        getEle(tdata.data);
-                        num --;
-                    }, 500);
-        }
-    }else{
-        return false;
-    }
-   
-}
-var webkit = {
-    messageHandlers :{
-        sensorsdataNativeTracker : {
-            postMessage : function(data){
-                console.log('ios 成功接收数据');
-                console.log('----',data)
-                drawDefine(data);
-            }
-        }
-    }
-};
-
-var SensorsData_iOS_JS_Bridge = {
-    sensorsdata_app_server_url: 'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
-};
-var SensorsData_App_Visual_Bridge = {
-    sensorsdata_visualized_mode:true,
-
-};
 
 var start = document.getElementById('startdefine');
 console.log(33);
@@ -163,9 +129,43 @@ if(start){
 }
 
 var num = 30;
-window.ls869 = true;
+window.ls869 = false;
 
 
+function drawDefine(data){
+    if(window.ls869 == true){
+        var tdata = JSON.parse(data);
+        if(num > 0){
+                    console.log('开始渲染');
+                    setTimeout(() => {
+                        getEle(tdata.data);
+                        num --;
+                    }, 500);
+        }
+    }else{
+        return false;
+    }
+   
+}
+var webkit = {
+    messageHandlers :{
+        sensorsdataNativeTracker : {
+            postMessage : function(data){
+                console.log('ios 成功接收数据');
+                console.log('----',data)
+                drawDefine(data);
+            }
+        }
+    }
+};
+
+var SensorsData_iOS_JS_Bridge = {
+    sensorsdata_app_server_url: 'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
+};
+var SensorsData_App_Visual_Bridge = {
+    sensorsdata_visualized_mode:true,
+
+};
 // var SensorsData_APP_JS_Bridge = {
 //     sensorsdata_track : function(data){
 //         // console.log('android APP_JS_Bridge 接收数据',data);
