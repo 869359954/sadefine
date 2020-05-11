@@ -2408,25 +2408,25 @@
         var debugList = {
           '1': {
                   "title": "当前页面无法进行可视化全埋点",
-                  "message": "App SDK 与 Web SDK 没有进行打通，请联系贵方技术人员修正 App SDK 的配置，详细信息请查看文档。",
+                  "message": "App SDK 与 Web JS SDK 没有进行打通，请联系贵方技术人员修正 App SDK 的配置，详细信息请查看文档。",
                   "link_text": "配置文档",
                   "link_url": "https://manual.sensorsdata.cn/sa/latest/app-h5-1573913.html"
                 },
           '2': {
                   "title": "当前页面无法进行可视化全埋点",
-                  "message": "App SDK 与 Web SDK 没有进行打通，请联系贵方技术人员修正 Web SDK 的配置，详细信息请查看文档。",
+                  "message": "App SDK 与 Web JS SDK 没有进行打通，请联系贵方技术人员修正 Web SDK 的配置，详细信息请查看文档。",
                   "link_text": "配置文档",
                   "link_url": "https://manual.sensorsdata.cn/sa/latest/app-h5-1573913.html"
                 },
           '3': {
                   "title": "当前页面无法进行可视化全埋点",
-                  "message": "Web SDK 没有开启全埋点配置，请联系贵方工作人员修正 SDK 的配置，详细信息请查看文档。",
+                  "message": "Web JS SDK 没有开启全埋点配置，请联系贵方工作人员修正 SDK 的配置，详细信息请查看文档。",
                   "link_text": "配置文档",
                   "link_url": "https://manual.sensorsdata.cn/sa/latest/app-h5-1573913.html"
                 },
           '4': {
                 "title": "当前页面无法进行可视化全埋点",
-                "message": "Web SDK 配置的数据校验地址与 App SDK 配置的数据校验地址不一致，请联系贵方工作人员修正 SDK 的配置，详细信息请查看文档。",
+                "message": "Web JS SDK 配置的数据校验地址与 App SDK 配置的数据校验地址不一致，请联系贵方工作人员修正 SDK 的配置，详细信息请查看文档。",
                 "link_text": "配置文档",
                 "link_url": "https://manual.sensorsdata.cn/sa/latest/app-h5-1573913.html"
                }
