@@ -2288,7 +2288,7 @@ sd.initPara = function(para){
             sd.para.app_js_bridge.is_verify_success = true;
           }else{
             //为圈选弹框保存debug信息 校验 server_url 失败 
-            sd.para.app_js_bridge.is_verify_success = '4';
+            sd.para.app_js_bridge.defineModeDebugInfo = '4';
           }
          
       }else if(_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track){
