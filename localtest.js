@@ -149,6 +149,7 @@ var webkit = {
         sensorsdataNativeTracker : {
             postMessage : function(data){
                 console.log('ios 成功接收数据');
+                console.log('----',data)
                 drawDefine(data);
             }
         }

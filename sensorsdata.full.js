@@ -2282,9 +2282,13 @@ sd.initPara = function(para){
       }
       return false;
     }
+    console.log('initapph5verify')
     if(_.isObject(sd.para.app_js_bridge) && !sd.para.app_js_bridge.is_mui){
+      console.log('initverify')
       if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url) {
-          if(checkProjectAndHost(window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)){
+          
+        if(checkProjectAndHost(window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)){
+            
             sd.para.app_js_bridge.is_verify_success = true;
           }else{
             //为圈选弹框保存debug信息 校验 server_url 失败 
@@ -2295,6 +2299,7 @@ sd.initPara = function(para){
         var app_server_url = window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url();
         if(app_server_url){
           if(checkProjectAndHost(app_server_url)){
+            console.log('校验成功')
             sd.para.app_js_bridge.is_verify_success = true;
           }else{
             //为圈选弹框保存debug信息 校验 server_url 失败
@@ -3548,6 +3553,7 @@ sendState.getSendCall = function(data, config, callback) {
   // 打通app传数据给app
   if(_.isObject(sd.para.app_js_bridge) && !sd.para.app_js_bridge.is_mui){
     //如果有新版，优先用新版
+    console.log('发送数据')
     if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url) {
       if(sd.para.app_js_bridge.is_verify_success){
         window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify({callType:'app_h5_track', data: _.extend({server_url:sd.para.server_url}, originData)}));
@@ -3563,8 +3569,11 @@ sendState.getSendCall = function(data, config, callback) {
         }       
       }
     }else if(_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track){
+      console.log('android 打通')
       if(sd.para.app_js_bridge.is_verify_success){
+        
         SensorsData_APP_New_H5_Bridge.sensorsdata_track(JSON.stringify(_.extend({server_url:sd.para.server_url},originData)));
+        console.log('数据已发送');
         (typeof callback === 'function') && callback();
       }else{
         if(sd.para.app_js_bridge.is_send){
@@ -4615,6 +4624,7 @@ var saNewUser = {
     if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
       if(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default'){
         if(_.isObject(sd.para.app_js_bridge) && (sd.para.app_js_bridge.is_verify_success || iosUAVerify)){
+          console.log('加载 define.js')
           _.loadScript({
             success:function(){
                 setTimeout(function(){
