@@ -3546,14 +3546,14 @@ sendState.getSendCall = function(data, config, callback) {
     sd.batchSend.add(this.requestData.data);
     return false;
   }
- console.log(sd.para.app_js_bridge)
+ console.log('iiiiiii',sd.para.app_js_bridge)
   // 打通app传数据给app
   if(_.isObject(sd.para.app_js_bridge) && !sd.para.app_js_bridge.is_mui){
     console.log('发送数据',sd.para.app_js_bridge);
     
     //如果有新版，优先用新版
     if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url) {
-     
+       
       if(sd.para.app_js_bridge.is_verify_success){
         window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify({callType:'app_h5_track', data: _.extend({server_url:sd.para.server_url}, originData)}));
         (typeof callback === 'function') && callback();
@@ -3585,7 +3585,7 @@ sendState.getSendCall = function(data, config, callback) {
  
       }   
     }else if((typeof SensorsData_APP_JS_Bridge === 'object') && (SensorsData_APP_JS_Bridge.sensorsdata_verify || SensorsData_APP_JS_Bridge.sensorsdata_track)){
-      console.log('老版打通')
+      console.log('老版 android 打通')
       // 如果有新版方式，优先用新版
       if(SensorsData_APP_JS_Bridge.sensorsdata_verify){
         console.log('Android 校验')
