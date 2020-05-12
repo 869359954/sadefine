@@ -3546,11 +3546,14 @@ sendState.getSendCall = function(data, config, callback) {
     sd.batchSend.add(this.requestData.data);
     return false;
   }
-
+ console.log(sd.para.app_js_bridge)
   // 打通app传数据给app
   if(_.isObject(sd.para.app_js_bridge) && !sd.para.app_js_bridge.is_mui){
+    console.log('发送数据',sd.para.app_js_bridge);
+    
     //如果有新版，优先用新版
     if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url) {
+     
       if(sd.para.app_js_bridge.is_verify_success){
         window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify({callType:'app_h5_track', data: _.extend({server_url:sd.para.server_url}, originData)}));
         (typeof callback === 'function') && callback();
@@ -3565,6 +3568,7 @@ sendState.getSendCall = function(data, config, callback) {
         }       
       }
     }else if(_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track){
+      console.log('新版打通')
       if(sd.para.app_js_bridge.is_verify_success){
         
         SensorsData_APP_New_H5_Bridge.sensorsdata_track(JSON.stringify(_.extend({server_url:sd.para.server_url},originData)));
@@ -3581,10 +3585,13 @@ sendState.getSendCall = function(data, config, callback) {
  
       }   
     }else if((typeof SensorsData_APP_JS_Bridge === 'object') && (SensorsData_APP_JS_Bridge.sensorsdata_verify || SensorsData_APP_JS_Bridge.sensorsdata_track)){
+      console.log('老版打通')
       // 如果有新版方式，优先用新版
       if(SensorsData_APP_JS_Bridge.sensorsdata_verify){
+        console.log('Android 校验')
         // 如果校验通过则结束，不通过则降级改成h5继续发送
         if(!SensorsData_APP_JS_Bridge.sensorsdata_verify(JSON.stringify(_.extend({server_url:sd.para.server_url},originData)))){
+           console.log('Android 校验失败')
           if (sd.para.app_js_bridge.is_send) {
             sd.debug.apph5({
               data: originData,
