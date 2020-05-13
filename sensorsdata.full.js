@@ -4130,7 +4130,7 @@ sd.bridge = {
       if(appObj.hostname === H5Obj.hostname && appObj.project === H5Obj.project){
          return true;
       }else{
-        if(sd.para.app_js_bridge.white_list[0]){
+        if(sd.para.app_js_bridge.white_list.length>0){
           for(var i=0;i<sd.para.app_js_bridge.white_list.length;i++){
             var urlobj = getHostNameAndProject(sd.para.app_js_bridge.white_list[i]);
             if(urlobj.hostname === appObj.hostname && urlobj.project === appObj.project){
