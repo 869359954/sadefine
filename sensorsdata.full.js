@@ -4703,6 +4703,20 @@ sd.bridge = {
      }
 
     }
+    function trackMode(){
+      window.sensorsdata_app_call_js = function(type){
+        if(type && type == 'visualized'){
+          me.initDefineMode();
+        }
+      };
+      me.initDefineMode();
+      todo();
+      //进入热力图采集模式
+      if (_.isObject(sd.para.heatmap)) {
+        this.initHeatmap();
+        this.initScrollmap();
+      }
+    }
     // 如果有id，才有可能是首次，首次的时候把web_url存进去
     if(match && match[0] && match[1]){
       heatmap.setNotice(web_url);
@@ -4794,28 +4808,8 @@ sd.bridge = {
           url: location.protocol + '//static.sensorsdata.cn/sdk/'+ sd.lib_version + '/vtrack.min.js'
         });
       }
-      function trackMode() {
-        //debugger;
-        todo();
-        //进入热力图采集模式
-        if (_.isObject(sd.para.heatmap)) {
-          heatmap.initHeatmap();
-          heatmap.initScrollmap();
-        }
-      }
     }else{
-      window.sensorsdata_app_call_js = function(type){
-        if(type && type == 'visualized'){
-          me.initDefineMode();
-        }
-      };
-      me.initDefineMode();
-      todo();
-      //进入热力图采集模式
-      if (_.isObject(sd.para.heatmap)) {
-        this.initHeatmap();
-        this.initScrollmap();
-      }
+      trackMode();
     }
 
 
