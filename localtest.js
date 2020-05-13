@@ -103,7 +103,7 @@ if(start){
         }
     })({
 
-        sdk_url:'https://869359954.github.io/sadefine/sensorsdata.full.js',
+        sdk_url:'./sensorsdata.full.js',
         // heatmap_url: './define/heatmap.full.js',
         name: 'sensors',
         is_track_device_id:true,
@@ -129,7 +129,7 @@ if(start){
 }
 
 var num = 30;
-window.ls869 = false;
+window.ls869 = true;
 
 
 function drawDefine(data){
