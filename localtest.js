@@ -130,7 +130,7 @@ if(start){
 }
 
 var num = 30;
-window.ls869 = true;
+window.ls869 = false;
 
 
 function drawDefine(data){
