@@ -3845,11 +3845,7 @@
         if (typeof sd.para.app_js_bridge === 'object') {
           sd.para.app_js_bridge = _.extend({}, app_js_bridge_default, sd.para.app_js_bridge);
         } else if (sd.para.use_app_track === true || sd.para.app_js_bridge === true || sd.para.use_app_track === 'only') {
-          if (sd.para.use_app_track_is_send === false) {
-            sd.log("设置了 use_app_track_is_send:false,如果打通失败，数据将被丢弃！");
-            app_js_bridge_default.is_send = false;
-          }else if(sd.para.use_app_track === 'only'){
-            sd.log("设置了 use_app_track:'only',如果打通失败，数据将被丢弃！");
+          if (sd.para.use_app_track_is_send === false || sd.para.use_app_track === 'only') {
             app_js_bridge_default.is_send = false;
           }
           sd.para.app_js_bridge = _.extend({}, app_js_bridge_default);
@@ -3998,9 +3994,8 @@
                   });
                   that.prepareServerUrl();
                 }
-                sd.log('sensorsdata_verify 失败');
               } else {
-                sd.log('sensorsdata_verify 成功发往 app');
+                sd.log('sensorsdata_verify 失败');
                 (typeof callback === 'function') && callback();
               }
             } else {
