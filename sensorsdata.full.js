@@ -4100,14 +4100,14 @@ sd.bridge = {
       sd.para.app_js_bridge = _.extend({},app_js_bridge_default,sd.para.app_js_bridge);
     }else if(sd.para.use_app_track === true || sd.para.app_js_bridge === true || sd.para.use_app_track === 'only'){
       if(sd.para.use_app_track_is_send === false || sd.para.use_app_track === 'only'){
-        sd.para.app_js_bridge_default.is_send = false;
+        app_js_bridge_default.is_send = false;
       }
       sd.para.app_js_bridge = _.extend({},app_js_bridge_default);
     }else if(sd.para.use_app_track === 'mui'){
-      sd.para.app_js_bridge_default.is_mui = true;
+      app_js_bridge_default.is_mui = true;
       sd.para.app_js_bridge = _.extend({},app_js_bridge_default);
     }    
-
+    console.log('初始化打通参数',sd.para.app_js_bridge);
   },
   //初始化是否打通
   initState:function(){
@@ -4145,8 +4145,10 @@ sd.bridge = {
     if(_.isObject(sd.para.app_js_bridge) && !sd.para.app_js_bridge.is_mui){
       if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url) {
           if(checkProjectAndHost(window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)){
+            console.log('ios 校验成功');
             sd.bridge.is_verify_success = true;
           }else{
+            console.log('iOS 校验失败',sd.para.app_js_bridge,window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url);
             //为圈选弹框保存debug信息 校验 server_url 失败
             sd.bridge.define_debug_info = 'verify_fail';
           }
@@ -4155,8 +4157,10 @@ sd.bridge = {
         var app_server_url = window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url();
         if(app_server_url){
           if(checkProjectAndHost(app_server_url)){
+            console.log('android 校验成功');
             sd.bridge.is_verify_success = true;
           }else{
+            console.log('android 校验失败',sd.para.app_js_bridge,app_server_url)
             //为圈选弹框保存debug信息 校验 server_url 失败
             sd.bridge.define_debug_info = 'verify_fail';
           }
@@ -4166,6 +4170,7 @@ sd.bridge = {
     }
   },
   iOS_UA_bridge: function(){
+    console.log('ios ua 校验')
     if (/sensors-verify/.test(navigator.userAgent)) {
       var match = navigator.userAgent.match(/sensors-verify\/([^\s]+)/);
       if (match && match[0] && (typeof match[1] === 'string') && (match[1].split('?').length === 2)) {
@@ -4195,10 +4200,13 @@ sd.bridge = {
   },
   dataSend:function(originData,that,callback){
       // 打通app传数据给app
+      console.log('datasend')
     if(_.isObject(sd.para.app_js_bridge) && !sd.para.app_js_bridge.is_mui){
       //如果有新版，优先用新版
       if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url) {
+        console.log('ios 新版打通')
         if(sd.bridge.is_verify_success){
+          console.log('新版打通数据成功发往 iOS')
           window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify({callType:'app_h5_track', data: _.extend({server_url:sd.para.server_url}, originData)}));
           (typeof callback === 'function') && callback();
         }else{
@@ -4212,7 +4220,9 @@ sd.bridge = {
           }       
         }
       }else if(_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track){
+        console.log('android 新版打通')
         if(sd.bridge.is_verify_success){
+          console.log('新版打通数据成功发往android ')
           SensorsData_APP_New_H5_Bridge.sensorsdata_track(JSON.stringify(_.extend({server_url:sd.para.server_url},originData)));
           (typeof callback === 'function') && callback();
         }else{
@@ -4228,9 +4238,11 @@ sd.bridge = {
         }   
       }else if((typeof SensorsData_APP_JS_Bridge === 'object') && (SensorsData_APP_JS_Bridge.sensorsdata_verify || SensorsData_APP_JS_Bridge.sensorsdata_track)){
         // 如果有新版方式，优先用新版
+        console.log('老版打通');
         if(SensorsData_APP_JS_Bridge.sensorsdata_verify){
           // 如果校验通过则结束，不通过则降级改成h5继续发送
           if(!SensorsData_APP_JS_Bridge.sensorsdata_verify(JSON.stringify(_.extend({server_url:sd.para.server_url},originData)))){
+            console.log('老版校验失败')
             if (sd.para.app_js_bridge.is_send) {
               sd.debug.apph5({
                 data: originData,
@@ -4240,13 +4252,16 @@ sd.bridge = {
               that.prepareServerUrl();
             }
           }else{
+            console.log('老版数据成功发往 app')
             (typeof callback === 'function') && callback();
           }
         }else{
+          console.log('数据成功发往 app')
           SensorsData_APP_JS_Bridge.sensorsdata_track(JSON.stringify(_.extend({server_url:sd.para.server_url},originData)));
           (typeof callback === 'function') && callback();
         }
       }else if((/sensors-verify/.test(navigator.userAgent) || /sa-sdk-ios/.test(navigator.userAgent)) && !window.MSStream){
+        console.log('ios 老版打通')
         var iframe = null;
         if(sd.bridge.iOS_UA_bridge()){
           iframe = document.createElement('iframe');
@@ -4256,8 +4271,10 @@ sd.bridge = {
           document.documentElement.appendChild(iframe);
           iframe.parentNode.removeChild(iframe);
           iframe = null;
+          console.log('老版，数据成功发往 iOS')
           (typeof callback === 'function') && callback();
         }else{
+          console.log('老版 ios 校验失败')
           if (sd.para.app_js_bridge.is_send) {
             sd.debug.apph5({
               data: originData,
@@ -4713,8 +4730,8 @@ sd.bridge = {
       todo();
       //进入热力图采集模式
       if (_.isObject(sd.para.heatmap)) {
-        this.initHeatmap();
-        this.initScrollmap();
+        me.initHeatmap();
+        me.initScrollmap();
       }
     }
     // 如果有id，才有可能是首次，首次的时候把web_url存进去
