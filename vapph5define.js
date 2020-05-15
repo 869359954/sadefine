@@ -24,13 +24,16 @@
                     var target = obj[i];
                     var tags = ['input','a','button','textarea'];
                     var tagname = target.tagName.toLowerCase();
-                    
+                    var parent_ele_tagname = '';
+
+                    if(target.parentNode && target.parentNode.tagName && target.parentNode.tagName.toLowerCase){
+                        parent_ele_tagname = target.parentNode.tagName.toLowerCase();
+                    }
                     if(tags.indexOf(tagname) > -1){
                         targetHandle(target,index);
+                    }else if(parent_ele_tagname && parent_ele_tagname === 'button' || parent_ele_tagname === 'a') {
+                        targetHandle(target,index);
                     }
-                
-
-
         　　　　　　  if(target.children){
                         func(target.children,index+1);
         　　　　　    }
@@ -59,14 +62,28 @@
                 }
                
                 if ( p ) {
+                    var parentPo = p.getBoundingClientRect();
                     if ( ('hidden' === _getStyle(p, 'overflow') || 'scroll' === _getStyle(p, 'overflow')) ) {
-                        var parentPo = p.getBoundingClientRect();
                         if (
                             (po.bottom <= parentPo.top)||
                             (po.top >= parentPo.bottom)||
                             (po.right <= parentPo.left)||
                             (po.left >= parentPo.right)
                         ) {  
+                            return false;
+                        }
+                    }else if('hidden' === _getStyle(p, 'overflow-y') || 'scroll' === _getStyle(p, 'overflow-y')){
+                        if(
+                            (po.bottom <= parentPo.top)||
+                            (po.top >= parentPo.bottom)
+                        ){
+                            return false;
+                        }
+                    }else if('hidden' === _getStyle(p, 'overflow-x') || 'scroll' === _getStyle(p, 'overflow-x')){
+                        if(
+                            (po.right <= parentPo.left)||
+                            (po.left >= parentPo.right)
+                        ){
                             return false;
                         }
                     }

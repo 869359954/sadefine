@@ -118,7 +118,10 @@ if(start){
             // element_selector:'not_use_id',
         },
         is_track_single_page:true,
-        use_app_track:'only',
+        app_js_bridge:{
+            is_send:false
+        },
+        // use_app_track:'only',
         // app_js_bridge:{
         //     white_list:[
         //     'https://newsdktest.datasink.sensorsdata.cn/sa?project=chuqiangsheng&token=5a394d2405c147ca',
@@ -153,7 +156,7 @@ var webkit = {
         sensorsdataNativeTracker : {
             postMessage : function(data){
                 console.log('ios 成功接收数据');
-                console.log('----',data)
+                console.log('----',data);
                 drawDefine(data);
             }
         }
