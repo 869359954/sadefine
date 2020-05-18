@@ -31,8 +31,6 @@
                     }
                     if(tags.indexOf(tagname) > -1){
                         targetHandle(target,index);
-                    }else if(parent_ele_tagname && parent_ele_tagname === 'button' || parent_ele_tagname === 'a') {
-                        targetHandle(target,index);
                     }
         　　　　　　  if(target.children){
                         func(target.children,index+1);
