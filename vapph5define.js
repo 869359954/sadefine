@@ -24,11 +24,7 @@
                     var target = obj[i];
                     var tags = ['input','a','button','textarea'];
                     var tagname = target.tagName.toLowerCase();
-                    var parent_ele_tagname = '';
-
-                    if(target.parentNode && target.parentNode.tagName && target.parentNode.tagName.toLowerCase){
-                        parent_ele_tagname = target.parentNode.tagName.toLowerCase();
-                    }
+                    
                     if(tags.indexOf(tagname) > -1){
                         targetHandle(target,index);
                     }
