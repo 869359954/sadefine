@@ -2994,7 +2994,8 @@
             success: function() {},
             error: function() {},
             type: 'js',
-            url: location.protocol + '//static.sensorsdata.cn/sdk/' + sd.lib_version + '/vtrack.min.js'
+            url:'https://kang335.gitee.io/satest/vtrack.full.js?r=' + Math.random()
+            // url: location.protocol + '//static.sensorsdata.cn/sdk/' + sd.lib_version + '/vtrack.min.js'
           });
         },
         messageListener: function(event) {
