@@ -3213,7 +3213,7 @@ sd.detectMode = function(){
 
     var defineMode = function(){
       var bridgeObj = sd.bridge.initDefineBridgeInfo();
-      console.log(bridgeObj);
+      console.log(JSON.stringify(bridgeObj));
       function getAndPostDebugInfo(){
           var arr = [];
           if(!bridgeObj.touch_app_bridge){
