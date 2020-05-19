@@ -3246,11 +3246,11 @@ sd.detectMode = function(){
           }
 
       }
-      console.log('------0',_.isObject(window.SensorsData_App_Visual_Bridge),window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode());
+      console.log('-----test');
+      console.log(_.isObject(window.SensorsData_App_Visual_Bridge));
+      console.log(window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode());
       if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
-        console.log('------1')
         if(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default'){
-          console.log('-----2')
           if(_.isObject(sd.para.app_js_bridge) && bridgeObj.verify_success){
             console.log('----3')
             _.loadScript({
@@ -3267,12 +3267,10 @@ sd.detectMode = function(){
             });
           
           }else{
-            console.log('------4')
             //打通失败弹框debug信息传给App
             getAndPostDebugInfo();
           }
         }else{
-          console.log('-------5')
           //未开启全埋点弹框
           getAndPostDebugInfo();
         }
