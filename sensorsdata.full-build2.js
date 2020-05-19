@@ -3213,7 +3213,7 @@ sd.detectMode = function(){
 
     var defineMode = function(){
       var bridgeObj = sd.bridge.initDefineBridgeInfo();
-      console.log('stringify', JSON.stringify(bridgeObj));
+      console.log('bridgeObj', JSON.stringify(bridgeObj));
       function getAndPostDebugInfo(){
           var arr = [];
           if(!bridgeObj.touch_app_bridge){
@@ -3236,23 +3236,18 @@ sd.detectMode = function(){
             callType: 'app_alert',
             data: arr
           };
-          console.log('data',data);
+          console.log(data);
           if(SensorsData_App_Visual_Bridge && SensorsData_App_Visual_Bridge.sensorsdata_visualized_alert_info){
-            console.log('alert',data);
             SensorsData_App_Visual_Bridge.sensorsdata_visualized_alert_info(JSON.stringify(data));
-            console.log('SensorsData_App_Visual_Bridge.sensorsdata_visualized_alert_info',SensorsData_App_Visual_Bridge.sensorsdata_visualized_alert_info);
           }else if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage){
             window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify(data));
           }
 
       }
-      console.log('-----test');
-      console.log(_.isObject(window.SensorsData_App_Visual_Bridge));
-      console.log(window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode());
+
       if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
         if(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default'){
           if(_.isObject(sd.para.app_js_bridge) && bridgeObj.verify_success){
-            console.log('----3')
             _.loadScript({
               success:function(){
                   setTimeout(function(){
