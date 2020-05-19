@@ -3030,35 +3030,23 @@
       };
 
       var defineMode = function() {
-
-        var appBridge = false;
-        var iosUAVerify = false;
-        if ((window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)) {
-          appBridge = true;
-        }
-        if ((_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track)) {
-          appBridge = true;
-        }
-        if ((/sensors-verify/.test(navigator.userAgent) || /sa-sdk-ios/.test(navigator.userAgent)) && !window.MSStream) {
-          appBridge = true;
-          if (sd.bridge.iOS_UA_bridge()) {
-            iosUAVerify = true;
-          }
-
-        }
-
+        var bridgeObj = sd.bridge.initDefineBridgeInfo();
         function getAndPostDebugInfo() {
           var arr = [];
-          if (!appBridge) {
+          if (!bridgeObj.touch_app_bridge) {
+            //App 未开启打通
             arr.push(sd.debug.defineMode('1'));
           }
-          if (!(_.isObject(sd.para.app_js_bridge))) {
+          if (!(_.isObject(sd.para.app_js_bridge))) { 
+            //js 未开启打通
             arr.push(sd.debug.defineMode('2'));
           }
           if (!(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default')) {
+            //js 未开启全埋点
             arr.push(sd.debug.defineMode('3'));
           }
-          if (sd.bridge.define_debug_info === 'verify_fail') {
+          if (!bridgeObj.verify_success) {
+            //校验 server_url 失败
             arr.push(sd.debug.defineMode('4'));
           }
           var data = {
@@ -3073,10 +3061,10 @@
           }
 
         }
-
+     
         if (_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))) {
           if (_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default') {
-            if (_.isObject(sd.para.app_js_bridge) && (sd.bridge.is_verify_success || iosUAVerify)) {
+            if (_.isObject(sd.para.app_js_bridge) && bridgeObj.verify_success) {
               _.loadScript({
                 success: function() {
                   setTimeout(function() {
@@ -4097,8 +4085,8 @@
 
 
     sd.bridge = {
+      //新版是否校验成功
       is_verify_success: false,
-      define_debug_info: '',
       initPara: function() {
         var app_js_bridge_default = {
           is_send: true,
@@ -4154,26 +4142,52 @@
 
         if (_.isObject(sd.para.app_js_bridge) && !sd.para.app_js_bridge.is_mui) {
           if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url) {
+            get_app_bridge = true;
             if (checkProjectAndHost(window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url)) {
               sd.bridge.is_verify_success = true;
-            } else {
-              sd.bridge.define_debug_info = 'verify_fail';
-            }
+            } 
 
           } else if (_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track) {
+            get_app_bridge = true;
             var app_server_url = window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url();
             if (app_server_url) {
               if (checkProjectAndHost(app_server_url)) {
                 sd.bridge.is_verify_success = true;
-              } else {
-                sd.bridge.define_debug_info = 'verify_fail';
               }
-            } else {
-              sd.bridge.define_debug_info = 'verify_fail';
-            }
+            } 
 
           }
         }
+      },
+      initDefineBridgeInfo:function(){
+        var resultObj = {
+          touch_app_bridge: true,
+          verify_success: false
+        };
+        if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url) {
+          if (sd.bridge.is_verify_success) {
+            resultObj.verify_success = true;
+          }
+        } else if (_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track) {
+          if (sd.bridge.is_verify_success) {
+            resultObj.verify_success = true;
+          }
+        } else if ((typeof SensorsData_APP_JS_Bridge === 'object') && ((SensorsData_APP_JS_Bridge.sensorsdata_verify && SensorsData_APP_JS_Bridge.sensorsdata_visual_verify)|| SensorsData_APP_JS_Bridge.sensorsdata_track)) {
+          if (SensorsData_APP_JS_Bridge.sensorsdata_verify && SensorsData_APP_JS_Bridge.sensorsdata_visual_verify) {
+            if (SensorsData_APP_JS_Bridge.sensorsdata_visual_verify(JSON.stringify({server_url: sd.para.server_url}))){
+              resultObj.verify_success = true;
+            }
+          } else {
+            resultObj.verify_success = true;
+          }
+        } else if ((/sensors-verify/.test(navigator.userAgent) || /sa-sdk-ios/.test(navigator.userAgent)) && !window.MSStream) {
+          if (sd.bridge.iOS_UA_bridge()) {
+            resultObj.verify_success = true;
+          }
+        }else{
+          resultObj.touch_app_bridge = false;
+        }
+        return resultObj;
       },
       iOS_UA_bridge: function() {
         if (/sensors-verify/.test(navigator.userAgent)) {
@@ -4191,7 +4205,6 @@
             if (hostname && hostname === match[0] && project && project === match[1]) {
               return true;
             } else {
-              sd.bridge.define_debug_info = 'verify_fail';
               return false;
             }
           } else {
@@ -4247,9 +4260,7 @@
             }
           } else if ((typeof SensorsData_APP_JS_Bridge === 'object') && (SensorsData_APP_JS_Bridge.sensorsdata_verify || SensorsData_APP_JS_Bridge.sensorsdata_track)) {
             if (SensorsData_APP_JS_Bridge.sensorsdata_verify) {
-              if (!SensorsData_APP_JS_Bridge.sensorsdata_verify(JSON.stringify(_.extend({
-                  server_url: sd.para.server_url
-                }, originData)))) {
+              if (!SensorsData_APP_JS_Bridge.sensorsdata_verify(JSON.stringify(_.extend({server_url: sd.para.server_url}, originData)))){
                 if (sd.para.app_js_bridge.is_send) {
                   sd.debug.apph5({
                     data: originData,

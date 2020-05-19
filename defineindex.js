@@ -6,7 +6,7 @@ if(start){
     start.onclick = function(){
         if(flag){
             var config = {
-                sdk_url:'./sensorsdata.full.js',
+                sdk_url:'./sensorsdata.full-build-2.js',
                 name: 'sensors',
                 server_url:'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
                 // server_url: 'http://liuxing2.debugbox.sensorsdata.cn/sa?project=chuqiangsheng',
