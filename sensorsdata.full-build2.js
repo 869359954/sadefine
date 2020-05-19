@@ -3236,9 +3236,11 @@ sd.detectMode = function(){
             callType: 'app_alert',
             data: arr
           };
-          
+          console.log('data',data);
           if(SensorsData_App_Visual_Bridge && SensorsData_App_Visual_Bridge.sensorsdata_visualized_alert_info){
+            console.log('alert',data);
             SensorsData_App_Visual_Bridge.sensorsdata_visualized_alert_info(JSON.stringify(data));
+            console.log('SensorsData_App_Visual_Bridge.sensorsdata_visualized_alert_info',SensorsData_App_Visual_Bridge.sensorsdata_visualized_alert_info);
           }else if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage){
             window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage(JSON.stringify(data));
           }
