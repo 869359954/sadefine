@@ -151,21 +151,21 @@ function drawDefine(data){
     }
    
 }
-var webkit = {
-    messageHandlers :{
-        sensorsdataNativeTracker : {
-            postMessage : function(data){
-                console.log('ios 成功接收数据');
-                console.log('----',data);
-                drawDefine(data);
-            }
-        }
-    }
-};
+// var webkit = {
+//     messageHandlers :{
+//         sensorsdataNativeTracker : {
+//             postMessage : function(data){
+//                 console.log('ios 成功接收数据');
+//                 console.log('----',data);
+//                 drawDefine(data);
+//             }
+//         }
+//     }
+// };
 
-var SensorsData_iOS_JS_Bridge = {
-    sensorsdata_app_server_url: 'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
-};
+// var SensorsData_iOS_JS_Bridge = {
+//     sensorsdata_app_server_url: 'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
+// };
 // var SensorsData_App_Visual_Bridge = {
 //     sensorsdata_visualized_mode:true,
 
@@ -193,32 +193,43 @@ var SensorsData_iOS_JS_Bridge = {
 //     }
 // };
 // var num = 3;
-var SensorsData_App_Visual_Bridge ={
-    sensorsdata_visualized_mode : function(){
-        return true;
-    },
-    sensorsdata_hover_web_nodes:function(data){
-    //    console.log('Android 圈选数据',data);
-       var tdata = JSON.parse(data);
-       if(num > 0){
-                console.log('开始渲染');
-                setTimeout(() => {
-                    getEle(tdata.data);
-                    num --;
-                }, 500);
+// var SensorsData_App_Visual_Bridge ={
+//     sensorsdata_visualized_mode : function(){
+//         return true;
+//     },
+//     sensorsdata_hover_web_nodes:function(data){
+//     //    console.log('Android 圈选数据',data);
+//        var tdata = JSON.parse(data);
+//        if(num > 0){
+//                 console.log('开始渲染');
+//                 setTimeout(() => {
+//                     getEle(tdata.data);
+//                     num --;
+//                 }, 500);
                 
-        }
-    },
-    sensorsdata_visualized_alert_info:function(data){
-        console.log(data);
-    }
-};
+//         }
+//     },
+//     sensorsdata_visualized_alert_info:function(data){
+//         console.log(data);
+//     }
+// };
 
 
 
 
 function getEle(resultarr){
     for(var i=0;i<resultarr.length;i++){
+        var divy = document.createElement('div');
+        
+        for(var prop in resultarr[i]){
+            str = '';
+            str = str + prop +':'+resultarr[i][prop];
+            var oli = document.createElement('li');
+            oli.innerText = str;
+            divy.appendChild(oli);
+        }
+        divy.style.border = '3px solid black';
+        document.body.appendChild(divy);
         var odiv = document.createElement('div');
         odiv.id = 'test'+i;
         odiv.style.margin = '0';
