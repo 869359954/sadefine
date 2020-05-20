@@ -122,6 +122,7 @@ if(start){
         // use_app_track:'only',
         app_js_bridge:{
             white_list:[
+            'http://10.120.81.212:8106/sa?project=default',
             'http://liuxing2.debugbox.sensorsdata.cn/sa?project=default',
             'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
             'http://10.120.81.212:8106/sa?project=default',
@@ -166,7 +167,7 @@ function drawDefine(data){
 // };
 
 // var SensorsData_iOS_JS_Bridge = {
-//     sensorsdata_app_server_url: 'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
+//     sensorsdata_app_server_url: 'http://10.120.81.212:8106/sa?project=default',
 // };
 // var SensorsData_App_Visual_Bridge = {
 //     sensorsdata_visualized_mode:true,
