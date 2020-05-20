@@ -111,7 +111,7 @@ if(start){
         source_type:{
             utm:['ls']
         },
-        server_url:'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
+        server_url:'http://liuxing.debugbox.sensorsdata.cn/sa?project=default',
         // server_url: 'http://liuxing2.debugbox.sensorsdata.cn/sa?project=chuqiangsheng',
         heatmap:{
             scroll_notice_map:'not_collect',
