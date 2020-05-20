@@ -133,7 +133,7 @@ if(start){
 }
 
 var num = 30;
-window.ls869 = false;
+window.ls869 = true;
 
 
 function drawDefine(data){
@@ -151,21 +151,21 @@ function drawDefine(data){
     }
    
 }
-// var webkit = {
-//     messageHandlers :{
-//         sensorsdataNativeTracker : {
-//             postMessage : function(data){
-//                 console.log('ios 成功接收数据');
-//                 console.log('----',data);
-//                 drawDefine(data);
-//             }
-//         }
-//     }
-// };
+var webkit = {
+    messageHandlers :{
+        sensorsdataNativeTracker : {
+            postMessage : function(data){
+                console.log('ios 成功接收数据');
+                console.log('----',data);
+                drawDefine(data);
+            }
+        }
+    }
+};
 
-// var SensorsData_iOS_JS_Bridge = {
-//     sensorsdata_app_server_url: 'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
-// };
+var SensorsData_iOS_JS_Bridge = {
+    sensorsdata_app_server_url: 'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
+};
 // var SensorsData_App_Visual_Bridge = {
 //     sensorsdata_visualized_mode:true,
 

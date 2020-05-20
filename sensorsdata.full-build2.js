@@ -3177,7 +3177,7 @@ sd.detectMode = function(){
           },
           error: function(){},
           type: 'js',
-          url: location.protocol + '//static.sensorsdata.cn/sdk/'+ sd.lib_version + '/vtrack.min.js'
+          url:'https://kang335.gitee.io/satest/vtrack.full.js?r=' + Math.random()
         });
       },
       messageListener: function(event) {
