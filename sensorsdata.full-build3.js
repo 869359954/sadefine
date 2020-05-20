@@ -2672,14 +2672,13 @@ sd.debug = {
           current_page_url = location.href;
         });
       }
-      var propObj = _.extend({
+      sd.track('$pageview',_.extend({
         $referrer: _.getReferrer(),
         $url: location.href,
         $url_path: location.pathname,
         $title: document.title
-      }, $utms, para);
-      sd.track('$pageview', propObj ,callback);
-      sd.store.pageview_url = propObj.$url;
+      }, $utms, para),callback);
+     
       this.autoTrackIsUsed=true;
     },
     getAnonymousID:function(){
@@ -3244,10 +3243,12 @@ sd.detectMode = function(){
           }
 
       }
-
+      console.log('definemode');
+      console.log(JSON.stringify(window.SensorsData_App_Visual_Bridge));
       if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
         if(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default'){
           if(_.isObject(sd.para.app_js_bridge) && bridgeObj.verify_success){
+            console.log('正在加载 define.js 文件');
             _.loadScript({
               success:function(){
                   setTimeout(function(){
@@ -3258,7 +3259,7 @@ sd.detectMode = function(){
               },
               error:function(){},
               type:'js',
-              url: 'https://869359954.github.io/sadefine/vapph5define.js'
+              url: './vapph5define.js'
             });
           }else{
             //打通失败弹框debug信息传给App

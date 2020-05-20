@@ -217,7 +217,7 @@
                     callType:"page_info",
                     data:{
                         "$title": document.title,  
-                        "$url": defineStore.sdStore.store.pageview_url 
+                        "$url": location.href
                     }
                 };
                 that.postData(dataObj);
@@ -238,6 +238,7 @@
             var that = this;
             var timer = null;
             window.sa_jssdk_app_define_mode = function(sd){
+                console.log('define.js已经加载');
                 that.sdStore = sd;
                 that.postPageInfo();
                 window.addEventListener('load',function(){
