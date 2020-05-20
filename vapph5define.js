@@ -217,7 +217,7 @@
                     callType:"page_info",
                     data:{
                         "$title": document.title,  
-                        "$url": location.href, 
+                        "$url": defineStore.sdStore.store.pageview_url 
                     }
                 };
                 that.postData(dataObj);
@@ -238,8 +238,8 @@
             var that = this;
             var timer = null;
             window.sa_jssdk_app_define_mode = function(sd){
-                that.postPageInfo();
                 that.sdStore = sd;
+                that.postPageInfo();
                 window.addEventListener('load',function(){
                     this.clearTimeout(timer);
                     that.getDefineInfo();//获取元素信息

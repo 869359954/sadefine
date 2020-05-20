@@ -132,10 +132,12 @@ if(start){
         }
     });
         
-        sensors.quick('autoTrack');
+        sensors.quick('autoTrack',{
+            $url:'13'
+        });
 }
 
-var num = 30;
+var num = 3;
 window.ls869 = true;
 
 
@@ -154,25 +156,25 @@ function drawDefine(data){
     }
    
 }
-// var webkit = {
-//     messageHandlers :{
-//         sensorsdataNativeTracker : {
-//             postMessage : function(data){
-//                 console.log('ios 成功接收数据');
-//                 console.log('----',data);
-//                 drawDefine(data);
-//             }
-//         }
-//     }
-// };
+var webkit = {
+    messageHandlers :{
+        sensorsdataNativeTracker : {
+            postMessage : function(data){
+                console.log('ios 成功接收数据');
+                console.log('----',data);
+                drawDefine(data);
+            }
+        }
+    }
+};
 
-// var SensorsData_iOS_JS_Bridge = {
-//     sensorsdata_app_server_url: 'http://10.120.81.212:8106/sa?project=default',
-// };
-// var SensorsData_App_Visual_Bridge = {
-//     sensorsdata_visualized_mode:true,
+var SensorsData_iOS_JS_Bridge = {
+    sensorsdata_app_server_url: 'http://10.120.81.212:8106/sa?project=default',
+};
+var SensorsData_App_Visual_Bridge = {
+    sensorsdata_visualized_mode:true,
 
-// };
+};
 // var SensorsData_APP_JS_Bridge = {
 //     sensorsdata_track : function(data){
 //         console.log('android APP_JS_Bridge 接收数据',data);
