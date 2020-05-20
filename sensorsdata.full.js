@@ -3278,6 +3278,9 @@ sd.detectMode = function(){
     function trackMode(){
 
       window.sensorsdata_app_call_js = function(type){
+        if(sa_jssdk_app_define_mode !== 'undefined'){
+          return false;
+        }
         if(type && type == 'visualized'){
           defineMode();
         }
