@@ -2679,7 +2679,7 @@ sd.debug = {
         $title: document.title
       }, $utms, para);
       sd.track('$pageview', propObj ,callback);
-      sd.store.pageview_url = propObj.$url;
+      
       this.autoTrackIsUsed=true;
     },
     getAnonymousID:function(){
