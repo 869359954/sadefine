@@ -3278,7 +3278,8 @@ sd.detectMode = function(){
     function trackMode(){
 
       window.sensorsdata_app_call_js = function(type){
-        if(sa_jssdk_app_define_mode !== 'undefined'){
+        if(window.sa_jssdk_app_define_mode !== 'undefined'){
+          console.log('重复加载');
           return false;
         }
         if(type && type == 'visualized'){

@@ -2445,25 +2445,25 @@ sd.debug = {
               "title": "当前页面无法进行可视化全埋点",
               "message": "App SDK 与 Web JS SDK 没有进行打通，请联系贵方技术人员修正 App SDK 的配置，详细信息请查看文档。",
               "link_text": "配置文档",
-              "link_url": "https://manual.sensorsdata.cn/sa/latest/app-h5-1573913.html"
+              "link_url": "https://manual.sensorsdata.cn/sa/latest/tech_sdk_client_link-1573913.html"
             },
       '2': {
               "title": "当前页面无法进行可视化全埋点",
               "message": "App SDK 与 Web JS SDK 没有进行打通，请联系贵方技术人员修正 Web JS SDK 的配置，详细信息请查看文档。",
               "link_text": "配置文档",
-              "link_url": "https://manual.sensorsdata.cn/sa/latest/app-h5-1573913.html"
+              "link_url": "https://manual.sensorsdata.cn/sa/latest/tech_sdk_client_link-1573913.html"
             },
       '3': {
               "title": "当前页面无法进行可视化全埋点",
               "message": "Web JS SDK 没有开启全埋点配置，请联系贵方工作人员修正 SDK 的配置，详细信息请查看文档。",
               "link_text": "配置文档",
-              "link_url": "https://manual.sensorsdata.cn/sa/latest/app-h5-1573913.html"
+              "link_url": "https://manual.sensorsdata.cn/sa/latest/tech_sdk_client_web_all-1573964.html"
             },
       '4': {
             "title": "当前页面无法进行可视化全埋点",
             "message": "Web JS SDK 配置的数据校验地址与 App SDK 配置的数据校验地址不一致，请联系贵方工作人员修正 SDK 的配置，详细信息请查看文档。",
             "link_text": "配置文档",
-            "link_url": "https://manual.sensorsdata.cn/sa/latest/app-h5-1573913.html"
+            "link_url": "https://manual.sensorsdata.cn/sa/latest/tech_sdk_client_link-1573913.html"
            }
     };
     if(type && debugList[type]){
@@ -2672,13 +2672,12 @@ sd.debug = {
           current_page_url = location.href;
         });
       }
-      sd.track('$pageview',_.extend({
+      sd.track('$pageview', _.extend({
         $referrer: _.getReferrer(),
         $url: location.href,
         $url_path: location.pathname,
         $title: document.title
-      }, $utms, para),callback);
-     
+      }, $utms, para) ,callback);
       this.autoTrackIsUsed=true;
     },
     getAnonymousID:function(){
@@ -3176,8 +3175,7 @@ sd.detectMode = function(){
           },
           error: function(){},
           type: 'js',
-          url:'https://kang335.gitee.io/satest/vtrack.full.js?r=' + Math.random()
-          // url: location.protocol + '//static.sensorsdata.cn/sdk/'+ sd.lib_version + '/vtrack.min.js'
+          url: location.protocol + '//static.sensorsdata.cn/sdk/'+ sd.lib_version + '/vtrack.min.js'
         });
       },
       messageListener: function(event) {
@@ -3243,12 +3241,10 @@ sd.detectMode = function(){
           }
 
       }
-      console.log('definemode');
-      console.log(JSON.stringify(window.SensorsData_App_Visual_Bridge));
+
       if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
         if(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default'){
           if(_.isObject(sd.para.app_js_bridge) && bridgeObj.verify_success){
-            console.log('正在加载 define.js 文件');
             _.loadScript({
               success:function(){
                   setTimeout(function(){
@@ -3259,7 +3255,7 @@ sd.detectMode = function(){
               },
               error:function(){},
               type:'js',
-              url: './vapph5define.js'
+              url: './vapph5define_build4.js'
             });
           }else{
             //打通失败弹框debug信息传给App
@@ -3279,6 +3275,9 @@ sd.detectMode = function(){
     function trackMode(){
 
       window.sensorsdata_app_call_js = function(type){
+        if(window.sa_jssdk_app_define_mode !== 'undefined'){
+          return false;
+        }
         if(type && type == 'visualized'){
           defineMode();
         }
@@ -4673,7 +4672,6 @@ sd.bridge = {
       if(!sd.para.heatmap_url){
         sd.para.heatmap_url = location.protocol + '//static.sensorsdata.cn/sdk/'+ sd.lib_version + '/heatmap.min.js';
       }
-
     },
     getDomIndex: function (el) {
       if (!el.parentNode) return -1;
