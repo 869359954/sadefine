@@ -220,6 +220,7 @@
                         "$url": location.href 
                     }
                 };
+                console.log('发送页面信息');
                 that.postData(dataObj);
             }
             getPageInfo();
@@ -237,6 +238,7 @@
         init : function(){
             var that = this;
             var timer = null;
+            console.log('define js加载成功');
             window.sa_jssdk_app_define_mode = function(sd,isLoaded){
                 if(isLoaded){
                     that.postPageInfo();

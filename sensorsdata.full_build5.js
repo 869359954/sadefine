@@ -3211,8 +3211,10 @@ sd.detectMode = function(){
     };
 
     var defineMode = function(isLoaded){
+      console.log('进入 definemode 方法',isLoaded);
       var bridgeObj = sd.bridge.initDefineBridgeInfo();
       function getAndPostDebugInfo(){
+        console.log('debug');
           var arr = [];
           if(!bridgeObj.touch_app_bridge){
             //App 没有开启打通
@@ -3246,6 +3248,7 @@ sd.detectMode = function(){
       if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
         if(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default'){
           if(_.isObject(sd.para.app_js_bridge) && bridgeObj.verify_success === 'success'){
+            console.log('开始加载 define js');
             if(!isLoaded){
               _.loadScript({
                 success:function(){
@@ -3257,7 +3260,7 @@ sd.detectMode = function(){
                 },
                 error:function(){},
                 type:'js',
-                url: './vapph5define_build5.js'
+                url: 'https://869359954.github.io/sadefine/vapph5define_build5.js'
               });
             }else{
               sa_jssdk_app_define_mode(sd,isLoaded);
@@ -3281,6 +3284,7 @@ sd.detectMode = function(){
     function trackMode(){
 
       window.sensorsdata_app_call_js = function(type){
+        console.log('调用 app call js 方法');
         if(type && type == 'visualized'){
           if(typeof sa_jssdk_app_define_mode !== 'undefined'){
             defineMode(true);
@@ -3290,7 +3294,7 @@ sd.detectMode = function(){
         }
         
       };
-
+      
       defineMode(false);
       
 

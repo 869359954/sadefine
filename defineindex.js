@@ -93,7 +93,7 @@ if(start){
 
 
 }else{
-    
+    console.log('开始加载 sdk 文件');
     (function(para) {
         var p = para.sdk_url, n = para.name, w = window, d = document, s = 'script',x = null,y = null;
         if(typeof(w['sensorsDataAnalytic201505']) !== 'undefined') {
