@@ -115,29 +115,25 @@ if(start){
         }
     })({
 
-        sdk_url:'https://869359954.github.io/sadefine/sensorsdata.full.js',
+        sdk_url:'https://869359954.github.io/sadefine/sensorsdata.full_build5.js',
         // heatmap_url: './define/heatmap.full.js',
         name: 'sensors',
-        is_track_device_id:true,
-        source_channel:['bd_vid'],
-        source_type:{
-            utm:['ls']
-        },
-        server_url:'http://liuxing.debugbox.sensorsdata.cn/sa?project=default',
+        
+        server_url:'http://apprntest2.debugbox.sensorsdata.cn/sa?project=default',
         // server_url: 'http://liuxing2.debugbox.sensorsdata.cn/sa?project=chuqiangsheng',
         heatmap:{
-            scroll_notice_map:'not_collect',
-            // element_selector:'not_use_id',
+            
         },
         is_track_single_page:true,
         app_js_bridge:{
             white_list:[
-            'http://liuxing2.debugbox.sensorsdata.cn/sa?project=default',
-            'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
-            'http://10.120.81.212:8106/sa?project=default',
-            'http://liuxing.debugbox.sensorsdata.cn/sa?project=default',
-            'https://newsdktest.datasink.sensorsdata.cn/sa?project=chuqiangsheng&token=5a394d2405c147ca',
-            'http://10.120.51.215:8106/sa?project=default&token=schemaLimited-0AUNwDG0'],
+                'http://apprntest2.debugbox.sensorsdata.cn/sa?project=default',
+                'http://liuxing2.debugbox.sensorsdata.cn/sa?project=default',
+                'https://newsdktest.datasink.sensorsdata.cn/sa?project=weizhangxiang&token=5a394d2405c147ca',
+                'http://10.120.81.212:8106/sa?project=default',
+                'http://liuxing.debugbox.sensorsdata.cn/sa?project=default',
+                'https://newsdktest.datasink.sensorsdata.cn/sa?project=chuqiangsheng&token=5a394d2405c147ca',
+                'http://10.120.51.215:8106/sa?project=default&token=schemaLimited-0AUNwDG0'],
         }
     });
         

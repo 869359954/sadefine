@@ -217,7 +217,7 @@
                     callType:"page_info",
                     data:{
                         "$title": document.title,  
-                        "$url": location.href
+                        "$url": location.href 
                     }
                 };
                 that.postData(dataObj);
@@ -253,7 +253,7 @@
                         that.getDefineInfo();
                         that.addDefineListener(that.getDefineInfo);
                     },1000);
-                }  
+                } 
             };
         }
     };

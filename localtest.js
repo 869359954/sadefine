@@ -103,7 +103,7 @@ if(start){
         }
     })({
 
-        sdk_url:'./sensorsdata.full.js',
+        sdk_url:'./sensorsdata.full_build5.js',
         // heatmap_url: './define/heatmap.full.js',
         name: 'sensors',
         is_track_device_id:true,

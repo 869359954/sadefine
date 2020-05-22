@@ -238,20 +238,24 @@
         init : function(){
             var that = this;
             var timer = null;
-
-            window.sa_jssdk_app_define_mode = function(sd){
-                that.sdStore = sd;
-                that.postPageInfo();
-                console.log('进入 define.js');
-                window.addEventListener('load',function(){
-                    this.clearTimeout(timer);
+            console.log('加载 define');
+            window.sa_jssdk_app_define_mode = function(sd,isLoaded){
+                if(isLoaded){
+                    that.postPageInfo();
                     that.getDefineInfo();//获取元素信息
-                    that.addDefineListener(that.getDefineInfo);//添加监控器
-                });
-                timer = setTimeout(function(){
-                    that.getDefineInfo();
-                    that.addDefineListener(that.getDefineInfo);
-                },1000);
+                }else{
+                    that.sdStore = sd;
+                    that.postPageInfo();
+                    window.addEventListener('load',function(){
+                        this.clearTimeout(timer);
+                        that.getDefineInfo();//获取元素信息
+                        that.addDefineListener(that.getDefineInfo);//添加监控器
+                    });
+                    timer = setTimeout(function(){
+                        that.getDefineInfo();
+                        that.addDefineListener(that.getDefineInfo);
+                    },1000);
+                } 
             };
         }
     };

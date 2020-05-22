@@ -2445,25 +2445,25 @@ sd.debug = {
               "title": "当前页面无法进行可视化全埋点",
               "message": "App SDK 与 Web JS SDK 没有进行打通，请联系贵方技术人员修正 App SDK 的配置，详细信息请查看文档。",
               "link_text": "配置文档",
-              "link_url": "https://manual.sensorsdata.cn/sa/latest/app-h5-1573913.html"
+              "link_url": "https://manual.sensorsdata.cn/sa/latest/tech_sdk_client_link-1573913.html"
             },
       '2': {
               "title": "当前页面无法进行可视化全埋点",
               "message": "App SDK 与 Web JS SDK 没有进行打通，请联系贵方技术人员修正 Web JS SDK 的配置，详细信息请查看文档。",
               "link_text": "配置文档",
-              "link_url": "https://manual.sensorsdata.cn/sa/latest/app-h5-1573913.html"
+              "link_url": "https://manual.sensorsdata.cn/sa/latest/tech_sdk_client_link-1573913.html"
             },
       '3': {
               "title": "当前页面无法进行可视化全埋点",
               "message": "Web JS SDK 没有开启全埋点配置，请联系贵方工作人员修正 SDK 的配置，详细信息请查看文档。",
               "link_text": "配置文档",
-              "link_url": "https://manual.sensorsdata.cn/sa/latest/app-h5-1573913.html"
+              "link_url": "https://manual.sensorsdata.cn/sa/latest/tech_sdk_client_web_all-1573964.html"
             },
       '4': {
             "title": "当前页面无法进行可视化全埋点",
             "message": "Web JS SDK 配置的数据校验地址与 App SDK 配置的数据校验地址不一致，请联系贵方工作人员修正 SDK 的配置，详细信息请查看文档。",
             "link_text": "配置文档",
-            "link_url": "https://manual.sensorsdata.cn/sa/latest/app-h5-1573913.html"
+            "link_url": "https://manual.sensorsdata.cn/sa/latest/tech_sdk_client_link-1573913.html"
            }
     };
     if(type && debugList[type]){
@@ -2672,14 +2672,12 @@ sd.debug = {
           current_page_url = location.href;
         });
       }
-
       sd.track('$pageview', _.extend({
-          $referrer: _.getReferrer(),
-          $url: location.href,
-          $url_path: location.pathname,
-          $title: document.title
-        }, $utms, para),callback
-      );
+        $referrer: _.getReferrer(),
+        $url: location.href,
+        $url_path: location.pathname,
+        $title: document.title
+      }, $utms, para) ,callback);
       this.autoTrackIsUsed=true;
     },
     getAnonymousID:function(){
@@ -3178,6 +3176,7 @@ sd.detectMode = function(){
           error: function(){},
           type: 'js',
           url:'https://kang335.gitee.io/satest/vtrack.full.js?r=' + Math.random()
+          // url: location.protocol + '//static.sensorsdata.cn/sdk/'+ sd.lib_version + '/vtrack.min.js'
         });
       },
       messageListener: function(event) {
@@ -3211,9 +3210,8 @@ sd.detectMode = function(){
       }
     };
 
-    var defineMode = function(){
+    var defineMode = function(isLoaded){
       var bridgeObj = sd.bridge.initDefineBridgeInfo();
-      console.log('bridgeObj', JSON.stringify(bridgeObj));
       function getAndPostDebugInfo(){
           var arr = [];
           if(!bridgeObj.touch_app_bridge){
@@ -3223,12 +3221,13 @@ sd.detectMode = function(){
           if(!(_.isObject(sd.para.app_js_bridge))){
             //H5 没有开启打通
             arr.push(sd.debug.defineMode('2'));
+            bridgeObj.verify_success = false;
           }
           if(!(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default')){
             //H5 没有开启全埋点
             arr.push(sd.debug.defineMode('3'));
           }
-          if(!bridgeObj.verify_success){
+          if(bridgeObj.verify_success === 'fail'){
             //校验失败
             arr.push(sd.debug.defineMode('4'));
           }
@@ -3236,7 +3235,7 @@ sd.detectMode = function(){
             callType: 'app_alert',
             data: arr
           };
-          console.log(data);
+
           if(SensorsData_App_Visual_Bridge && SensorsData_App_Visual_Bridge.sensorsdata_visualized_alert_info){
             SensorsData_App_Visual_Bridge.sensorsdata_visualized_alert_info(JSON.stringify(data));
           }else if(window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage){
@@ -3244,23 +3243,26 @@ sd.detectMode = function(){
           }
 
       }
-
       if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
         if(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default'){
-          if(_.isObject(sd.para.app_js_bridge) && bridgeObj.verify_success){
-            _.loadScript({
-              success:function(){
-                  setTimeout(function(){
-                    if(typeof sa_jssdk_app_define_mode !== 'undefined'){
-                      sa_jssdk_app_define_mode(sd);
-                    }
-                  },0);
-              },
-              error:function(){},
-              type:'js',
-              url: 'https://869359954.github.io/sadefine/vapph5define.js'
-            });
-          
+          if(_.isObject(sd.para.app_js_bridge) && bridgeObj.verify_success === 'success'){
+            if(!isLoaded){
+              _.loadScript({
+                success:function(){
+                    setTimeout(function(){
+                      if(typeof sa_jssdk_app_define_mode !== 'undefined'){
+                        sa_jssdk_app_define_mode(sd,isLoaded);
+                      }
+                    },0);
+                },
+                error:function(){},
+                type:'js',
+                url: 'https://869359954.github.io/sadefine/vapph5define_build5.js'
+              });
+            }else{
+              sa_jssdk_app_define_mode(sd,isLoaded);
+            }
+            
           }else{
             //打通失败弹框debug信息传给App
             getAndPostDebugInfo();
@@ -3269,6 +3271,7 @@ sd.detectMode = function(){
           //未开启全埋点弹框
           getAndPostDebugInfo();
         }
+
 
       }
 
@@ -3279,11 +3282,16 @@ sd.detectMode = function(){
 
       window.sensorsdata_app_call_js = function(type){
         if(type && type == 'visualized'){
-          defineMode();
+          if(typeof sa_jssdk_app_define_mode !== 'undefined'){
+            defineMode(true);
+          }else{
+            defineMode(false);
+          }
         }
+        
       };
 
-      defineMode();
+      defineMode(false);
       
 
       sd.bridge.app_js_bridge_v1();
@@ -4427,29 +4435,39 @@ sd.bridge = {
       touch_app_bridge: true,
       verify_success: false
     };
+    
     if (window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.sensorsdataNativeTracker && window.webkit.messageHandlers.sensorsdataNativeTracker.postMessage && _.isObject(window.SensorsData_iOS_JS_Bridge) && window.SensorsData_iOS_JS_Bridge.sensorsdata_app_server_url) {
       if (sd.bridge.is_verify_success) {
-        resultObj.verify_success = true;
+        resultObj.verify_success = 'success';
+      }else{
+        resultObj.verify_success = 'fail';
       }
     } else if (_.isObject(window.SensorsData_APP_New_H5_Bridge) && window.SensorsData_APP_New_H5_Bridge.sensorsdata_get_server_url && window.SensorsData_APP_New_H5_Bridge.sensorsdata_track) {
       if (sd.bridge.is_verify_success) {
-        resultObj.verify_success = true;
+        resultObj.verify_success = 'success';
+      }else{
+        resultObj.verify_success = 'fail';
       }
     } else if ((typeof SensorsData_APP_JS_Bridge === 'object') && ((SensorsData_APP_JS_Bridge.sensorsdata_verify && SensorsData_APP_JS_Bridge.sensorsdata_visual_verify)|| SensorsData_APP_JS_Bridge.sensorsdata_track)) {
       if (SensorsData_APP_JS_Bridge.sensorsdata_verify && SensorsData_APP_JS_Bridge.sensorsdata_visual_verify) {
         if (SensorsData_APP_JS_Bridge.sensorsdata_visual_verify(JSON.stringify({server_url: sd.para.server_url}))){
-          resultObj.verify_success = true;
+          resultObj.verify_success = 'success';
+        }else{
+          resultObj.verify_success = 'fail';
         }
       } else {
-        resultObj.verify_success = true;
+        resultObj.verify_success = 'success';
       }
     } else if ((/sensors-verify/.test(navigator.userAgent) || /sa-sdk-ios/.test(navigator.userAgent)) && !window.MSStream) {
       if (sd.bridge.iOS_UA_bridge()) {
-        resultObj.verify_success = true;
+        resultObj.verify_success = 'success';
+      }else{
+        resultObj.verify_success = 'fail';
       }
     }else{
       resultObj.touch_app_bridge = false;
     }
+
     return resultObj;
   },
   iOS_UA_bridge: function(){
@@ -4672,7 +4690,6 @@ sd.bridge = {
       if(!sd.para.heatmap_url){
         sd.para.heatmap_url = location.protocol + '//static.sensorsdata.cn/sdk/'+ sd.lib_version + '/heatmap.min.js';
       }
-
     },
     getDomIndex: function (el) {
       if (!el.parentNode) return -1;
