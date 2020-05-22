@@ -3243,9 +3243,11 @@ sd.detectMode = function(){
           }
 
       }
+      console.log('进入可视化开启判断');
       if(_.isObject(window.SensorsData_App_Visual_Bridge) && window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode && ((window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode === true) || (window.SensorsData_App_Visual_Bridge.sensorsdata_visualized_mode()))){
         if(_.isObject(sd.para.heatmap) && sd.para.heatmap.clickmap == 'default'){
           if(_.isObject(sd.para.app_js_bridge) && bridgeObj.verify_success === 'success'){
+            console.log('开始加载 define.js');
             if(!isLoaded){
               _.loadScript({
                 success:function(){
@@ -3279,8 +3281,9 @@ sd.detectMode = function(){
 
 
     function trackMode(){
-
+      console.log('注入方法 app call js');
       window.sensorsdata_app_call_js = function(type){
+        console.log('sensorsdata_app_call_js 被调用');
         if(type && type == 'visualized'){
           if(typeof sa_jssdk_app_define_mode !== 'undefined'){
             defineMode(true);
@@ -3351,22 +3354,28 @@ sd.detectMode = function(){
       heatmapMode.hasKeywordHandle();
       // 通过检查iframe     
     }else if (window.parent !== self) {
+      console.log('----d');
       vtrackMode.verifyVtrackMode();
       // 如果1秒后没有收到有效的回复说是vtrack模式，就进入新的判断
       setTimeout(function() {
+        console.log('选择模式');
         if (vtrackMode.isVtrackMode) {
+          console.log('mode1')
           return false;
         }
         //删除监听
         vtrackMode.removeMessageHandle();
         //判断是否处于点击图的storage模式
         if(heatmapMode.isStoregeHasKeyword()){
+          console.log('mode2');
           heatmapMode.storageHasKeywordHandle();
         }else{
+          console.log('mode3');
           trackMode();
         }
       }, 1000);
     }else{
+      console.log('trackmode');
       trackMode();
     }
 
