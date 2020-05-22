@@ -220,6 +220,7 @@
                         "$url": location.href 
                     }
                 };
+                alert('H5 发送可视化页面信息');
                 that.postData(dataObj);
             }
             getPageInfo();
