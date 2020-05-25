@@ -1,5 +1,4 @@
-
-    console.log('开始加载 sdk 文件');
+console.log('开始加载 sdk 文件');
     (function(para) {
         var p = para.sdk_url, n = para.name, w = window, d = document, s = 'script',x = null,y = null;
         if(typeof(w['sensorsDataAnalytic201505']) !== 'undefined') {
@@ -21,9 +20,10 @@
         }
     })({
 
-        sdk_url:'./sensorsdata.full_build5.js',
+        sdk_url:'https://cdn.jsdelivr.net/npm/sa-sdk-javascript@1.15.5/sensorsdata.min.js',
         // heatmap_url: './define/heatmap.full.js',
         name: 'sensors',
+        
         server_url:'http://apprntest2.debugbox.sensorsdata.cn/sa?project=default',
         // server_url: 'http://liuxing2.debugbox.sensorsdata.cn/sa?project=chuqiangsheng',
         heatmap:{
@@ -43,11 +43,3 @@
     });
         
         sensors.quick('autoTrack');
-
-
-
-
- 
-            
-            
-      
