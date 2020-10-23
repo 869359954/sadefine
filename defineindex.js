@@ -115,7 +115,7 @@ if(start){
         }
     })({
 
-        sdk_url:'https://869359954.github.io/sadefine/sensorsdata.full_build5.js',
+        sdk_url:'https://cdn.jsdelivr.net/npm/sa-sdk-javascript@1.15.21/sensorsdata.min.js',
         // heatmap_url: './define/heatmap.full.js',
         name: 'sensors',
         
