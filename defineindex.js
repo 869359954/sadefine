@@ -134,7 +134,8 @@ if(start){
                 'http://liuxing.debugbox.sensorsdata.cn/sa?project=default',
                 'https://newsdktest.datasink.sensorsdata.cn/sa?project=chuqiangsheng&token=5a394d2405c147ca',
                 'http://10.120.51.215:8106/sa?project=default&token=schemaLimited-0AUNwDG0',
-                'http://apimapping.debugbox.sensorsdata.cn/10-120-46-62/8106/sa?project=default&token=schemaLimited-g8gZIuzx'
+                'http://apimapping.debugbox.sensorsdata.cn/10-120-46-62/8106/sa?project=default&token=schemaLimited-g8gZIuzx',
+                'http://10.120.46.62:8106/sa?project=default'
             ]
 
         }
