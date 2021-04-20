@@ -37,7 +37,8 @@ if(start){
                         white_list:[
                             'http://10.120.81.212:8106/sa?project=default',
                             'https://newsdktest.datasink.sensorsdata.cn/sa?project=chuqiangsheng&token=5a394d2405c147ca',
-                            'http://10.120.51.215:8106/sa?project=default&token=schemaLimited-0AUNwDG0'
+                            'http://10.120.51.215:8106/sa?project=default&token=schemaLimited-0AUNwDG0',
+                            'http://10.120.47.2:8106/sa?project=default'
                         ]
                         
                     };
@@ -119,7 +120,7 @@ if(start){
         // heatmap_url: './define/heatmap.full.js',
         name: 'sensors',
         
-        server_url:'http://apprntest2.debugbox.sensorsdata.cn/sa?project=default',
+        server_url:'http://10.120.47.2:8106/sa?project=default',
         // server_url: 'http://liuxing2.debugbox.sensorsdata.cn/sa?project=chuqiangsheng',
         heatmap:{
             
@@ -134,8 +135,8 @@ if(start){
                 'http://liuxing.debugbox.sensorsdata.cn/sa?project=default',
                 'https://newsdktest.datasink.sensorsdata.cn/sa?project=chuqiangsheng&token=5a394d2405c147ca',
                 'http://10.120.51.215:8106/sa?project=default&token=schemaLimited-0AUNwDG0',
-                'http://apimapping.debugbox.sensorsdata.cn/10-120-46-62/8106/sa?project=default&token=schemaLimited-g8gZIuzx',
-                'http://10.120.46.62:8106/sa?project=default'
+                'http://10.120.46.62:8106/sa?project=default',
+                'http://10.120.47.2:8106/sa?project=default'
             ]
 
         }
